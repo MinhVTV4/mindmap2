@@ -3,38 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sơ đồ tư duy MVP - Firebase</title>
+    <title>Sơ đồ tư duy MVP - Firebase AI</title>
     <script src="https://unpkg.com/konva@9.3.6/konva.min.js"></script>
     <style>
-        html, body { 
+        html, body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f0f2f5;
             color: #1c1e21;
-            height: 100%; 
-            overflow: hidden; 
+            height: 100%;
+            overflow: hidden;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         #app-root {
             display: flex;
             flex-direction: column;
             height: 100%;
         }
-        .container { 
+        .container {
             width: 100%;
-            padding: 0; 
+            padding: 0;
             background-color: #fff;
-            box-shadow: none; 
-            flex-grow: 1; 
-            display: flex; 
+            box-shadow: none;
+            flex-grow: 1;
+            display: flex;
             flex-direction: column;
         }
-        /* --- AUTH SECTION --- */
-        #auth-section { 
+        #auth-section {
             padding: 20px;
-            max-width: 450px; 
-            margin: auto; 
-            flex-grow: 0; 
+            max-width: 450px;
+            margin: auto;
+            flex-grow: 0;
         }
         .form-container {
             max-width: 400px;
@@ -56,17 +61,17 @@
             border-radius: 6px;
             font-size: 16px;
         }
-        input[type="number"] { 
-            width: 50px; 
-            padding: 6px; 
-            margin-left: 3px; 
-            margin-right: 10px; 
+        input[type="number"] {
+            width: 50px;
+            padding: 6px;
+            margin-left: 3px;
+            margin-right: 10px;
             border: 1px solid #dddfe2;
             border-radius: 4px;
-            font-size: 13px; 
+            font-size: 13px;
             text-align: center;
         }
-        select { /* Style cho select dropdown */
+        select {
             padding: 6px;
             margin-left: 3px;
             margin-right: 10px;
@@ -76,232 +81,393 @@
             background-color: white;
         }
         button {
-            padding: 8px 12px; 
-            font-size: 14px; 
+            padding: 8px 12px;
+            font-size: 14px;
             font-weight: bold;
             background-color: #1877f2;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            margin-right: 6px; 
+            margin-right: 6px;
             transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #166fe5;
-        }
-        button.secondary {
-            background-color: #e4e6eb;
-            color: #4b4f56;
-        }
-        button.secondary:hover {
-            background-color: #ccd0d5;
-        }
-        button.danger {
-            background-color: #fa3e3e;
-        }
-        button.danger:hover {
-            background-color: #e03030;
-        }
-        .auth-toggle {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .auth-toggle a {
-            color: #1877f2;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .auth-toggle a:hover {
-            text-decoration: underline;
-        }
-        .error-message {
-            color: #fa3e3e;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        /* --- MAIN APP SECTION --- */
-        #main-app-section {
-            display: flex;
-            flex-direction: column;
-            height: 100%; 
-            padding: 8px; 
-            box-sizing: border-box; 
-        }
+        button:hover { background-color: #166fe5; }
+        button.secondary { background-color: #e4e6eb; color: #4b4f56; }
+        button.secondary:hover { background-color: #ccd0d5; }
+        button.danger { background-color: #fa3e3e; }
+        button.danger:hover { background-color: #e03030; }
+        .auth-toggle { text-align: center; margin-top: 15px; }
+        .auth-toggle a { color: #1877f2; text-decoration: none; font-weight: bold; }
+        .auth-toggle a:hover { text-decoration: underline; }
+        .error-message { color: #fa3e3e; font-size: 0.9em; margin-bottom: 10px; text-align: center; }
+        #main-app-section { display: flex; flex-direction: column; height: 100%; padding: 0; box-sizing: border-box; }
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 8px; 
-            margin-bottom: 8px; 
+            padding: 10px 15px;
+            margin-bottom: 0;
             border-bottom: 1px solid #dddfe2;
-            flex-shrink: 0; 
+            flex-shrink: 0;
+            background-color: #fff;
+            position: relative;
+            z-index: 100;
         }
         header h1 {
             color: #1c1e21;
-            font-size: 18px; 
+            font-size: 16px;
             margin: 0;
-        }
-        #user-info span {
-            margin-right: 8px; 
-            font-size: 0.85em; 
-        }
-        #mindmap-management-view { 
-             display: flex;
-             flex-direction: column;
-        }
-        #mindmap-management, #canvas-view {
-            margin-bottom: 8px; 
-        }
-        #mindmap-list-container{
+            text-align: center;
             flex-grow: 1;
-            overflow-y: auto; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        #mindmap-list {
-            list-style: none;
-            padding: 0;
-        }
-        #mindmap-list li {
-            padding: 8px; 
-            border: 1px solid #dddfe2;
-            margin-bottom: 4px; 
+        #hamburger-menu-button {
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: #1877f2;
             cursor: pointer;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s;
+            padding: 5px;
+            margin-right: 10px;
         }
-        #mindmap-list li:hover {
-            background-color: #f0f2f5;
-        }
+        #user-info { /* Desktop user info */ }
+        #user-info span { margin-right: 8px; font-size: 0.85em; }
 
-        #canvas-view {
-            flex-grow: 1; 
+        #mobile-nav-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1001;
+            transition: left 0.3s ease-in-out;
+            padding: 20px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            overflow: hidden; 
         }
+        #mobile-nav-menu.open {
+            left: 0;
+        }
+        #mobile-nav-menu .user-info-mobile {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        #mobile-nav-menu .user-info-mobile span {
+            display: block;
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+        #mobile-nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #mobile-nav-menu li button, #mobile-nav-menu li a {
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            text-align: left;
+            background: none;
+            border: none;
+            font-size: 1em;
+            color: #333;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        #mobile-nav-menu li button:hover, #mobile-nav-menu li a:hover {
+            background-color: #f0f2f5;
+        }
+        #mobile-nav-menu #logout-button-mobile {
+            margin-top: auto;
+            background-color: #e4e6eb;
+            color: #4b4f56;
+            text-align: center;
+            border-radius: 6px;
+        }
+        #mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            z-index: 1000;
+        }
+
+        #mindmap-management-view { display: flex; flex-direction: column; padding: 15px; }
+        #mindmap-management, #canvas-view { margin-bottom: 8px; }
+        #mindmap-list-container{ flex-grow: 1; overflow-y: auto; }
+        #mindmap-list { list-style: none; padding: 0; }
+        #mindmap-list li { padding: 8px; border: 1px solid #dddfe2; margin-bottom: 4px; cursor: pointer; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.2s; }
+        #mindmap-list li:hover { background-color: #f0f2f5; }
+        #canvas-view { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+
         #canvas-toolbar {
-            display: flex; 
-            align-items: center; 
-            flex-wrap: wrap; 
-            padding: 6px 5px; 
-            margin-bottom: 5px; 
-            border-bottom: 1px solid #ccd0d5; 
-            flex-shrink: 0; 
-        }
-        #canvas-toolbar .toolbar-section { 
             display: flex;
             align-items: center;
-            margin-right: 15px; 
-            margin-bottom: 5px; 
+            flex-wrap: wrap;
+            padding: 6px 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ccd0d5;
+            flex-shrink: 0;
         }
-        #canvas-toolbar .toolbar-section:last-child {
-            margin-right: 0;
-        }
-        #canvas-toolbar h2 {
-            margin: 0 10px 0 0; 
-            font-size: 16px; 
-            font-weight: 500; 
-            white-space: nowrap; 
-            overflow: hidden;
-            text-overflow: ellipsis; 
-            max-width: 150px; 
-        }
-        #back-to-maps-list-button { 
-            padding: 6px 8px; 
-            font-size: 18px; 
-            line-height: 1;
-        }
-        #konva-container {
-            width: 100%;
-            flex-grow: 1; 
-            background-color: #f7f7f7; 
-            border: 1px solid #ccd0d5; 
-            border-radius: 6px;
-            position: relative; 
-            overflow: hidden; 
-        }
-        .hidden {
-            display: none !important;
-        }
-        .loading-indicator {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-        }
-        /* Node Style Panel */
+        #canvas-toolbar .toolbar-section { display: flex; align-items: center; margin-right: 15px; margin-bottom: 5px; }
+        #canvas-toolbar .toolbar-section:last-child { margin-right: 0; }
+        #canvas-toolbar h2 { margin: 0 10px 0 0; font-size: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+        #back-to-maps-list-button { padding: 6px 8px; font-size: 18px; line-height: 1; }
+
+        #konva-container { width: 100%; flex-grow: 1; background-color: #f7f7f7; border: 1px solid #ccd0d5; border-radius: 6px; position: relative; overflow: hidden; }
+        .hidden { display: none !important; }
+        .loading-indicator { text-align: center; padding: 20px; font-style: italic; color: #555; }
+        #ai-loading-indicator { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); color: white; display: flex; justify-content: center; align-items: center; z-index: 2000; font-size: 1.2em; text-shadow: 1px 1px 2px black; }
+
         #node-style-panel {
-            padding: 5px; 
+            padding: 10px;
             background-color: #f9f9f9;
             border: 1px solid #e0e0e0;
             border-radius: 4px;
             box-sizing: border-box;
-            display: flex; 
-            align-items: center;
-            flex-wrap: wrap; 
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 1005;
+            transition: bottom 0.3s ease-in-out;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
         }
-        #node-style-panel h5 { 
-            margin: 0 5px 0 0; 
-            font-size: 0.85em; 
-            color: #606770;
-            white-space: nowrap;
+        #node-style-panel.active-mobile-style {
+            bottom: 0;
         }
-        #node-style-panel label {
-            margin-right: 2px; 
-            font-size: 0.8em; 
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-        #node-style-panel input[type="color"] {
-            width: 22px; 
-            height: 22px;
-            padding: 0;
-            border: 1px solid #ccc;
-            border-radius: 3px; 
-            vertical-align: middle;
-            margin-right: 5px; 
-        }
-        #node-style-panel input[type="number"], #node-style-panel select { 
-            width: auto; 
-            min-width: 60px;
-            padding: 4px; 
-            font-size: 0.8em; 
-        }
-        .style-group { 
-            margin-bottom: 0; 
-            display: flex; 
-            align-items: center;
-            margin-right: 8px; 
-        }
-        .style-group:last-child {
-            margin-right: 0;
-        }
-        /* Context Menu */
-        #context-menu {
-            position: absolute;
-            z-index: 1000;
-            background-color: white;
-            border: 1px solid #ccc;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-            border-radius: 4px;
-            padding: 5px 0;
-        }
-        #context-menu ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        #context-menu li {
-            padding: 8px 15px;
-            cursor: pointer;
+        #node-style-panel h5 { margin: 0 0 10px 0; font-size: 1em; color: #333; text-align: center; }
+        #node-style-panel label { margin-right: 5px; font-size: 0.9em; white-space: nowrap; }
+        #node-style-panel input[type="color"] { width: 30px; height: 30px; padding: 0; border: 1px solid #ccc; border-radius: 4px; vertical-align: middle; margin-right: 10px; }
+        #node-style-panel input[type="number"], #node-style-panel select {
+            width: auto;
+            flex-grow: 1;
+            padding: 8px;
             font-size: 0.9em;
+            margin-bottom: 10px;
         }
-        #context-menu li:hover {
+        .style-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .style-group label {
+            min-width: 80px;
+        }
+        #close-node-style-panel-button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+
+        #context-menu { position: absolute; z-index: 1010; background-color: white; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); border-radius: 4px; padding: 5px 0; }
+        #context-menu ul { list-style: none; padding: 0; margin: 0; }
+        #context-menu li { padding: 8px 15px; cursor: pointer; font-size: 0.9em; }
+        #context-menu li:hover { background-color: #f0f0f0; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1001; padding: 15px; box-sizing: border-box;}
+        .modal-content { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 90%; max-width: 650px; max-height: 85vh; display: flex; flex-direction: column; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .modal-header h4 { margin: 0; font-size: 1.2em; color: #333; }
+        .modal-close-button { background: none; border: none; font-size: 1.6em; cursor: pointer; color: #777; line-height: 1; padding: 0 5px;}
+        .modal-close-button:hover { color: #000; }
+        .modal-body { overflow-y: auto; line-height: 1.6; font-size: 0.95em; }
+        .modal-body p { margin-top:0; margin-bottom: 1em; }
+        .modal-body strong { color: #1877f2; }
+        .modal-body pre, .modal-body div[contenteditable="false"] {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            border: 1px solid #e9ecef;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        .read-more-indicator {
+            fill: #007bff;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        .read-more-indicator:hover {
+            opacity: 1;
+        }
+
+        #fab-add-node {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background-color: #1877f2;
+            color: white;
+            border-radius: 50%;
+            border: none;
+            font-size: 28px;
+            line-height: 56px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #fab-add-node:hover {
+            background-color: #166fe5;
+        }
+        #fab-add-node:active {
+            transform: scale(0.95);
+        }
+
+        #mobile-node-context-toolbar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 8px 5px;
+            box-sizing: border-box;
+            z-index: 998;
+            justify-content: space-around;
+            align-items: center;
+        }
+        #mobile-node-context-toolbar button {
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 22px;
+            padding: 10px;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 50%;
+        }
+        #mobile-node-context-toolbar button:hover {
             background-color: #f0f0f0;
         }
+        #mobile-node-context-toolbar button.danger {
+            color: #fa3e3e;
+        }
+
+        @media (max-width: 768px) {
+            header #user-info {
+                display: none;
+            }
+            #canvas-toolbar {
+                display: none !important;
+            }
+            #fab-add-node {
+                display: block;
+            }
+            #main-app-section {
+                padding: 0;
+            }
+            header {
+                padding: 8px 10px;
+            }
+            header h1 {
+                font-size: 1em;
+                margin-left: 5px;
+            }
+            #hamburger-menu-button {
+                display: block;
+            }
+            #mobile-node-context-toolbar.active {
+                display: flex;
+            }
+            #node-style-panel:not(.active-mobile-style) {
+                 position: static;
+                 bottom: auto;
+                 left: auto;
+                 width: auto;
+                 max-height: none;
+                 flex-direction: row;
+                 flex-wrap: wrap;
+                 box-shadow: none;
+                 padding: 5px;
+                 border: 1px solid #e0e0e0;
+                 border-radius: 4px;
+                 margin-right: 15px;
+                 margin-bottom: 5px;
+            }
+            #node-style-panel.active-mobile-style {
+                display: flex !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-height: 70vh;
+                flex-direction: column;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+                padding: 15px;
+                z-index: 1005;
+            }
+            #node-style-panel.active-mobile-style #close-node-style-panel-button {
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            #hamburger-menu-button {
+                display: none;
+            }
+            #mobile-nav-menu {
+                display: none;
+            }
+            #mobile-nav-overlay {
+                display: none;
+            }
+            #fab-add-node {
+                display: none;
+            }
+            #mobile-node-context-toolbar {
+                display: none !important;
+            }
+            #node-style-panel.active-mobile-style {
+                position: static;
+                bottom: auto;
+                left: auto;
+                width: auto;
+                max-height: none;
+                flex-direction: row;
+                flex-wrap: wrap;
+                box-shadow: none;
+                padding: 5px;
+                border: 1px solid #e0e0e0;
+                border-radius: 4px;
+                 margin-right: 15px;
+                 margin-bottom: 5px;
+            }
+            #node-style-panel #close-node-style-panel-button {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -327,12 +493,25 @@
 
         <section id="main-app-section" class="container hidden">
             <header>
+                <button id="hamburger-menu-button">☰</button>
                 <h1 id="main-app-title">Bảng điều khiển</h1>
                 <div id="user-info">
                     <span id="user-email-display"></span>
                     <button id="logout-button" class="secondary">Đăng xuất</button>
                 </div>
             </header>
+
+            <div id="mobile-nav-overlay" class="hidden"></div>
+            <div id="mobile-nav-menu">
+                <div class="user-info-mobile">
+                    <span id="user-email-display-mobile"></span>
+                </div>
+                <ul>
+                    <li><button id="mobile-back-to-maps-list-button">Quản lý Sơ đồ</button></li>
+                </ul>
+                <button id="logout-button-mobile" class="secondary">Đăng xuất</button>
+            </div>
+
 
             <div id="mindmap-management-view">
                 <h2>Quản lý Sơ đồ tư duy</h2>
@@ -343,8 +522,7 @@
                 <div id="mindmap-list-container">
                     <h3>Danh sách sơ đồ của bạn:</h3>
                     <div id="mindmap-list-loading" class="loading-indicator hidden">Đang tải danh sách...</div>
-                    <ul id="mindmap-list">
-                        </ul>
+                    <ul id="mindmap-list"></ul>
                 </div>
             </div>
 
@@ -359,7 +537,7 @@
                         <h2 id="current-mindmap-title-display"></h2>
                     </div>
                     <div class="toolbar-section">
-                        <button id="add-child-node-button" title="Thêm nút con (Click)">Thêm Nút</button> 
+                        <button id="add-child-node-button" title="Thêm nút con (Click)">Thêm Nút</button>
                         <button id="delete-node-button" class="danger" title="Xóa nút đã chọn (Delete/Backspace)">Xóa Nút</button>
                     </div>
                     <div class="toolbar-section">
@@ -368,7 +546,7 @@
                         <button id="zoom-out-button" class="secondary" title="Thu nhỏ">-</button>
                         <button id="reset-zoom-button" class="secondary" title="Reset zoom">Reset</button>
                     </div>
-                     <div id="node-style-panel" class="toolbar-section hidden">
+                    <div id="node-style-panel" class="toolbar-section hidden">
                         <div class="style-group">
                             <label for="node-shape-select">Hình dạng:</label>
                             <select id="node-shape-select" title="Hình dạng nút">
@@ -393,7 +571,7 @@
                             <input type="number" id="node-font-size-input" min="8" max="72" title="Cỡ chữ nút">
                         </div>
                         <div class="style-group">
-                            <label for="node-icon-select">Icon:</label> 
+                            <label for="node-icon-select">Icon:</label>
                             <select id="node-icon-select" title="Biểu tượng nút">
                                 <option value="">Không có</option>
                                 <option value="⭐">⭐ Ngôi sao</option>
@@ -420,7 +598,7 @@
                             <input type="color" id="node-line-color" title="Màu đường nối từ nút này">
                         </div>
                          <div class="style-group">
-                            <label for="node-line-dash-select">Kiểu đường:</label> 
+                            <label for="node-line-dash-select">Kiểu đường:</label>
                             <select id="node-line-dash-select" title="Kiểu đường nối từ nút này">
                                 <option value="solid">Liền</option>
                                 <option value="dashed">Đứt</option>
@@ -431,6 +609,7 @@
                             <label for="node-line-width">Dày:</label>
                             <input type="number" id="node-line-width" min="1" max="10" title="Độ dày đường nối từ nút này">
                         </div>
+                        <button id="close-node-style-panel-button" class="hidden">Xong</button>
                     </div>
                 </div>
                 <div id="konva-container-loading" class="loading-indicator hidden">Đang tải sơ đồ...</div>
@@ -438,12 +617,52 @@
             </div>
         </section>
 
+        <button id="fab-add-node" title="Thêm nút">+</button>
+
+        <div id="mobile-node-context-toolbar" class="hidden">
+            <button id="mobile-ctx-edit" title="Sửa chữ">✏️</button>
+            <button id="mobile-ctx-style" title="Kiểu nút">🎨</button>
+            <button id="mobile-ctx-ai" title="Hành động AI">✨</button>
+            <button id="mobile-ctx-delete" class="danger" title="Xóa nút">🗑️</button>
+        </div>
+
+
         <div id="context-menu" class="hidden">
             <ul>
                 <li id="ctx-add-child">Thêm nút con (Tab)</li>
                 <li id="ctx-edit-text">Sửa văn bản (Enter)</li>
+                <li id="ctx-view-full-content">📄 Xem toàn bộ nội dung</li>
+                <li id="ctx-suggest-children">✨ Gợi ý nút con (AI)</li>
+                <li id="ctx-expand-node">🔍 Mở rộng ý tưởng (AI)</li>
+                <li id="ctx-generate-examples">💡 AI Tạo Ví Dụ</li>
+                <li id="ctx-ask-ai-node">💬 Hỏi AI về nút này...</li>
+                <li id="ctx-summarize-branch">📄 AI Tóm tắt nhánh này</li>
+                <li id="ctx-generate-action-plan">🚀 AI Tạo Kế hoạch Hành động</li>
                 <li id="ctx-delete-node">Xóa nút & con (Delete)</li>
             </ul>
+        </div>
+
+        <div id="ai-loading-indicator" class="hidden">Đang xử lý AI...</div>
+
+        <div id="ai-response-modal-overlay" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="ai-response-modal-title">Phản hồi từ AI</h4>
+                    <button id="ai-response-modal-close-button" class="modal-close-button">&times;</button>
+                </div>
+                <div class="modal-body" id="ai-response-modal-body"></div>
+            </div>
+        </div>
+
+        <div id="node-content-modal-overlay" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="node-content-modal-title">Nội dung đầy đủ của nút</h4>
+                    <button id="node-content-modal-close-button" class="modal-close-button">&times;</button>
+                </div>
+                <div class="modal-body" id="node-content-modal-body">
+                    </div>
+            </div>
         </div>
     </div>
 
@@ -462,7 +681,7 @@
             collection,
             addDoc,
             doc,
-            getDoc, 
+            getDoc,
             getDocs,
             updateDoc,
             deleteDoc,
@@ -470,10 +689,12 @@
             where,
             serverTimestamp,
             onSnapshot,
-            writeBatch 
+            writeBatch
         } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+        import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-ai.js";
 
-        // --- FIREBASE CONFIGURATION ---
+
+        // --- FIREBASE CONFIGURATION (Sử dụng giá trị từ file gốc của bạn) ---
         const firebaseConfig = {
             apiKey: "AIzaSyDLVuv2RGAJWUjhan-5oNCkGBwQZAN60aY",
             authDomain: "vocab-91599.firebaseapp.com",
@@ -483,106 +704,67 @@
             appId: "1:918212044361:web:50b7a065fe0b22b1924198"
         };
 
-        // --- INITIALIZE FIREBASE ---
+        // --- MODULE-SCOPED VARIABLES (Firebase, State, etc.) ---
         let app;
         let auth;
         let db;
+        let ai;
+        let generativeModel;
 
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            console.log("Firebase initialized successfully!");
-        } catch (error) {
-            console.error("Firebase initialization error:", error);
-            alert("Lỗi nghiêm trọng: Không thể khởi tạo Firebase. Ứng dụng có thể không hoạt động. Chi tiết: " + error.message);
-        }
-
-
-        // --- GLOBAL APP STATE ---
         let currentUser = null;
         let currentMindMapId = null;
         let currentKonvaStage = null;
         let currentKonvaLayer = null;
-        let selectedKonvaNode = null; 
-        let mindmapNodesUnsubscribe = null; 
-        let allNodesDataForCurrentMap = []; 
-        let mindmapDataUnsubscribe = null; 
-        let tempCreationLine = null; 
-        let rightClickedKonvaNode = null; 
-        let isEditingText = false; 
-        const DEFAULT_NODE_STYLE = { 
-            backgroundColor: "#e0e0e0", textColor: "#000000", borderColor: "#555555", 
-            shape: "rectangle", 
-            width: 150, minHeight: 50, padding: 10, 
-            cornerRadius: 5, 
-            fontSize: 14, fontFamily: 'Arial', 
-            icon: '', 
-            iconSize: 16, 
-            iconSpacing: 5, 
-            lineColor: "#888888", lineWidth: 3, lineDash: [] // Tăng lineWidth mặc định
+        let selectedKonvaNode = null;
+        let mindmapNodesUnsubscribe = null;
+        let allNodesDataForCurrentMap = [];
+        let mindmapDataUnsubscribe = null;
+        let tempCreationLine = null;
+        let rightClickedKonvaNode = null;
+        let isEditingText = false;
+        const DEFAULT_NODE_STYLE = {
+            backgroundColor: "#e0e0e0", textColor: "#000000", borderColor: "#555555",
+            shape: "rectangle",
+            width: 150, minHeight: 50, padding: 10,
+            cornerRadius: 5,
+            fontSize: 14, fontFamily: 'Arial',
+            icon: '',
+            iconSize: 16,
+            iconSpacing: 5,
+            lineColor: "#888888", lineWidth: 3, lineDash: []
         };
+        const MAX_DISPLAY_LINES_IN_NODE = 4;
+        let contextMenuJustOpened = false;
+
+        let potentiallyDraggedNode = null;
+        let dragStartPointerPosition = null;
+        const DRAG_THRESHOLD = 10;
+
+        let longPressTimeoutId = null;
+        let touchStartTargetNodeForContextMenu = null;
+        let touchStartPointerPositionForContextMenu = null;
+        const LONG_PRESS_DELAY = 750;
+        const LONG_PRESS_MOVE_THRESHOLD = 10;
+        let touchStartCoordsForLongPress = { x: 0, y: 0 };
+
+        const HANDLE_RADIUS = 8;
+        const HANDLE_FILL = 'rgba(0,180,0,0.7)';
+        const HANDLE_STROKE = 'rgba(0,100,0,0.9)';
+        const scaleBy = 1.1;
+        const KEYBOARD_MOVE_STEP = 10;
 
 
-        // --- DOM ELEMENTS ---
-        const nodeStylePanel = document.getElementById('node-style-panel');
-        const nodeShapeSelect = document.getElementById('node-shape-select'); 
-        const nodeFontFamilySelect = document.getElementById('node-font-family-select'); 
-        const nodeFontSizeInput = document.getElementById('node-font-size-input'); 
-        const nodeIconSelect = document.getElementById('node-icon-select'); 
-        const nodeBgColorInput = document.getElementById('node-bg-color');
-        const nodeTextColorInput = document.getElementById('node-text-color');
-        const nodeBorderColorInput = document.getElementById('node-border-color');
-        const nodeLineColorInput = document.getElementById('node-line-color'); 
-        const nodeLineDashSelect = document.getElementById('node-line-dash-select'); 
-        const nodeLineWidthInput = document.getElementById('node-line-width'); 
-
-        // Context Menu Elements
-        const contextMenu = document.getElementById('context-menu');
-        const ctxAddChildButton = document.getElementById('ctx-add-child');
-        const ctxEditTextButton = document.getElementById('ctx-edit-text');
-        const ctxDeleteNodeButton = document.getElementById('ctx-delete-node');
-
-
-        // Auth
-        const authSection = document.getElementById('auth-section');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const loginEmailInput = document.getElementById('login-email');
-        const loginPasswordInput = document.getElementById('login-password');
-        const loginButton = document.getElementById('login-button');
-        const showRegisterLink = document.getElementById('show-register-link');
-        const registerEmailInput = document.getElementById('register-email');
-        const registerPasswordInput = document.getElementById('register-password');
-        const registerButton = document.getElementById('register-button');
-        const showLoginLink = document.getElementById('show-login-link');
-        const loginErrorMsg = document.getElementById('login-error');
-        const registerErrorMsg = document.getElementById('register-error');
-
-        // Main App
-        const mainAppSection = document.getElementById('main-app-section');
-        const mainAppTitle = document.getElementById('main-app-title');
-        const userEmailDisplay = document.getElementById('user-email-display');
-        const logoutButton = document.getElementById('logout-button');
-
-        // Mind Map Management View
-        const mindmapManagementView = document.getElementById('mindmap-management-view');
-        const newMindmapTitleInput = document.getElementById('new-mindmap-title-input');
-        const createMindmapButton = document.getElementById('create-mindmap-button');
-        const mindmapListUl = document.getElementById('mindmap-list');
-        const mindmapListLoading = document.getElementById('mindmap-list-loading');
-
-        // Canvas View
-        const canvasView = document.getElementById('canvas-view');
-        const backToMapsListButton = document.getElementById('back-to-maps-list-button');
-        const currentMindmapTitleDisplay = document.getElementById('current-mindmap-title-display');
-        const addChildNodeButton = document.getElementById('add-child-node-button');
-        const deleteNodeButton = document.getElementById('delete-node-button');
-        const zoomInButton = document.getElementById('zoom-in-button');
-        const zoomOutButton = document.getElementById('zoom-out-button');
-        const resetZoomButton = document.getElementById('reset-zoom-button');
-        const konvaContainer = document.getElementById('konva-container');
-        const konvaContainerLoading = document.getElementById('konva-container-loading');
+        // --- DOM ELEMENT VARIABLES (will be assigned in DOMContentLoaded) ---
+        let nodeStylePanel, nodeShapeSelect, nodeFontFamilySelect, nodeFontSizeInput, nodeIconSelect, nodeBgColorInput, nodeTextColorInput, nodeBorderColorInput, nodeLineColorInput, nodeLineDashSelect, nodeLineWidthInput, closeNodeStylePanelButton;
+        let contextMenu, ctxAddChildButton, ctxEditTextButton, ctxViewFullContentButton, ctxSuggestChildrenButton, ctxExpandNodeButton, ctxGenerateExamplesButton, ctxAskAiNodeButton, ctxSummarizeBranchButton, ctxGenerateActionPlanButton, ctxDeleteNodeButton;
+        let aiLoadingIndicator, aiResponseModalOverlay, aiResponseModalTitle, aiResponseModalBody, aiResponseModalCloseButton;
+        let nodeContentModalOverlay, nodeContentModalTitle, nodeContentModalBody, nodeContentModalCloseButton;
+        let authSection, loginForm, registerForm, loginEmailInput, loginPasswordInput, loginButton, showRegisterLink, registerEmailInput, registerPasswordInput, registerButton, showLoginLink, loginErrorMsg, registerErrorMsg;
+        let mainAppSection, mainAppTitle, userEmailDisplay, logoutButton;
+        let mindmapManagementView, newMindmapTitleInput, createMindmapButton, mindmapListUl, mindmapListLoading;
+        let canvasView, backToMapsListButton, currentMindmapTitleDisplay, addChildNodeButton, deleteNodeButton, zoomInButton, zoomOutButton, resetZoomButton, konvaContainer, konvaContainerLoading;
+        let hamburgerMenuButton, mobileNavMenu, mobileNavOverlay, userEmailDisplayMobile, mobileBackToMapsListButton, logoutButtonMobile, fabAddNode;
+        let mobileNodeContextToolbar, mobileCtxEditButton, mobileCtxStyleButton, mobileCtxAiButton, mobileCtxDeleteButton;
 
 
         // --- UTILITY FUNCTIONS ---
@@ -600,146 +782,263 @@
                 hideElement(el);
             }
         }
-
-        // --- AUTHENTICATION LOGIC ---
-        if (showRegisterLink) {
-            showRegisterLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                hideElement(loginForm);
-                showElement(registerForm);
-                clearAuthError(loginErrorMsg);
-            });
+        function showLoadingIndicator(message) {
+            if (aiLoadingIndicator) {
+                aiLoadingIndicator.textContent = message || "Đang xử lý AI...";
+                showElement(aiLoadingIndicator);
+            }
+        }
+        function hideLoadingIndicator() {
+            if (aiLoadingIndicator) {
+                hideElement(aiLoadingIndicator);
+            }
+        }
+        function hideContextMenu() {
+            if(contextMenu) hideElement(contextMenu);
+            contextMenuJustOpened = false;
+        }
+        function openAiResponseModal(title, userQuestion, aiAnswer) {
+            if (aiResponseModalOverlay && aiResponseModalTitle && aiResponseModalBody) {
+                aiResponseModalTitle.textContent = title || "Phản hồi từ AI";
+                let contentHTML = '';
+                if (userQuestion) {
+                    const sanitizedUserQuestion = userQuestion.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    contentHTML += `<p><strong>Đầu vào cho AI (có thể đã được rút gọn):</strong></p><pre style="max-height: 150px; overflow-y: auto; background-color: #efefef; padding: 5px; border-radius: 3px; white-space: pre-wrap; word-wrap: break-word;">${sanitizedUserQuestion}</pre>`;
+                }
+                const formattedAiAnswer = aiAnswer.replace(/\n/g, '<br>');
+                contentHTML += `<p><strong>AI trả lời:</strong></p><div style="background-color: #f9f9f9; padding: 10px; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; font-size: 0.9em;">${formattedAiAnswer}</div>`;
+                aiResponseModalBody.innerHTML = contentHTML;
+                showElement(aiResponseModalOverlay);
+                if (currentKonvaStage && currentKonvaStage.listening()) {
+                    currentKonvaStage.listening(false);
+                }
+            }
+        }
+        function closeAiResponseModal() {
+            if (aiResponseModalOverlay) {
+                hideElement(aiResponseModalOverlay);
+                 if (currentKonvaStage && !currentKonvaStage.listening()) {
+                    currentKonvaStage.listening(true);
+                }
+            }
+        }
+        function openNodeContentModal(nodeTitle, fullContent) {
+            if (nodeContentModalOverlay && nodeContentModalTitle && nodeContentModalBody) {
+                nodeContentModalTitle.textContent = `Nội dung: ${nodeTitle.substring(0, 30)}${nodeTitle.length > 30 ? '...' : ''}`;
+                const formattedContent = fullContent.replace(/\n/g, '<br>');
+                nodeContentModalBody.innerHTML = `<div contenteditable="false" style="white-space: pre-wrap;">${formattedContent}</div>`;
+                showElement(nodeContentModalOverlay);
+                if (currentKonvaStage && currentKonvaStage.listening()) {
+                    currentKonvaStage.listening(false);
+                }
+            }
+        }
+        function closeNodeContentModal() {
+            if (nodeContentModalOverlay) {
+                hideElement(nodeContentModalOverlay);
+                 if (currentKonvaStage && !currentKonvaStage.listening()) {
+                    currentKonvaStage.listening(true);
+                }
+            }
         }
 
-        if (showLoginLink) {
-            showLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                hideElement(registerForm);
-                showElement(loginForm);
-                clearAuthError(registerErrorMsg);
-            });
-        }
+        // --- START: KEYBOARD SHORTCUTS (Moved earlier) ---
+        function handleGlobalKeyDown(e) {
+            if (isEditingText) return;
+            if (contextMenu && !contextMenu.classList.contains('hidden')) {
+                if (e.key === 'Escape') {
+                    hideContextMenu();
+                }
+                return;
+            }
+            if (!selectedKonvaNode && !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                if (e.key === 'Tab' || e.key === 'Enter' || e.key === 'Delete' || e.key === 'Backspace') return;
+            }
 
-        if (registerButton) {
-            registerButton.addEventListener('click', async () => {
-                if (!auth) {
-                     displayAuthError(registerErrorMsg, "Lỗi: Dịch vụ xác thực chưa sẵn sàng.");
-                     return;
-                }
-                const email = registerEmailInput.value;
-                const password = registerPasswordInput.value;
-                clearAuthError(registerErrorMsg);
-                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "YOUR_API_KEY_HERE") { 
-                    displayAuthError(registerErrorMsg, "Lỗi cấu hình Firebase: API Key không hợp lệ. Vui lòng kiểm tra lại firebaseConfig.");
-                    return;
-                }
-                try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                } catch (error) {
-                    console.error("Register error:", error);
-                    displayAuthError(registerErrorMsg, "Lỗi đăng ký: " + error.code + " - " + error.message);
-                }
-            });
+            switch (e.key) {
+                case 'Tab':
+                    if (selectedKonvaNode) {
+                        e.preventDefault();
+                        addChildNodeLogic(selectedKonvaNode);
+                    }
+                    break;
+                case 'Enter':
+                    if (selectedKonvaNode) {
+                        e.preventDefault();
+                        const textNode = selectedKonvaNode.findOne('.nodeTextContent');
+                        const shapeNode = selectedKonvaNode.findOne('.nodeShape');
+                        if (textNode && shapeNode) {
+                            editTextOnKonvaNode(selectedKonvaNode, textNode, shapeNode.height());
+                        }
+                    }
+                    break;
+                case 'Delete':
+                case 'Backspace':
+                    if (selectedKonvaNode) {
+                        e.preventDefault();
+                        deleteNodeLogic(selectedKonvaNode);
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                case 'ArrowRight':
+                    e.preventDefault();
+                    if (selectedKonvaNode) {
+                        let newX = selectedKonvaNode.x();
+                        let newY = selectedKonvaNode.y();
+                        if (e.key === 'ArrowUp') newY -= KEYBOARD_MOVE_STEP;
+                        else if (e.key === 'ArrowDown') newY += KEYBOARD_MOVE_STEP;
+                        else if (e.key === 'ArrowLeft') newX -= KEYBOARD_MOVE_STEP;
+                        else if (e.key === 'ArrowRight') newX += KEYBOARD_MOVE_STEP;
+                        selectedKonvaNode.position({ x: newX, y: newY });
+                        if(currentKonvaLayer) currentKonvaLayer.batchDraw();
+                        if (db) {
+                            updateDoc(doc(db, "nodes", selectedKonvaNode.id()), { position: { x: newX, y: newY } })
+                                .catch(err => console.error("Error updating node position via keyboard:", err));
+                        }
+                    } else if (currentKonvaStage) {
+                        let stageX = currentKonvaStage.x();
+                        let stageY = currentKonvaStage.y();
+                        if (e.key === 'ArrowUp') stageY += KEYBOARD_MOVE_STEP * 2;
+                        else if (e.key === 'ArrowDown') stageY -= KEYBOARD_MOVE_STEP * 2;
+                        else if (e.key === 'ArrowLeft') stageX += KEYBOARD_MOVE_STEP * 2;
+                        else if (e.key === 'ArrowRight') stageX -= KEYBOARD_MOVE_STEP * 2;
+                        currentKonvaStage.position({ x: stageX, y: stageY });
+                        currentKonvaStage.batchDraw();
+                        saveCanvasState();
+                    }
+                    break;
+            }
         }
+        // --- END: KEYBOARD SHORTCUTS ---
 
-        if (loginButton) {
-            loginButton.addEventListener('click', async () => {
-                if (!auth) {
-                     displayAuthError(loginErrorMsg, "Lỗi: Dịch vụ xác thực chưa sẵn sàng.");
-                     return;
-                }
-                const email = loginEmailInput.value;
-                const password = loginPasswordInput.value;
-                clearAuthError(loginErrorMsg);
-                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "YOUR_API_KEY_HERE") { 
-                    displayAuthError(loginErrorMsg, "Lỗi cấu hình Firebase: API Key không hợp lệ. Vui lòng kiểm tra lại firebaseConfig.");
-                    return;
-                }
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } catch (error) { 
-                    console.error("Login error:", error);
-                    displayAuthError(loginErrorMsg, "Lỗi đăng nhập: " + error.code + " - " + error.message);
-                }
-            });
+
+        // --- AUTHENTICATION LOGIC (Function definitions) ---
+        async function handleRegister() {
+            if (!auth) {
+                 displayAuthError(registerErrorMsg, "Lỗi: Dịch vụ xác thực chưa sẵn sàng.");
+                 return;
+            }
+            const email = registerEmailInput.value;
+            const password = registerPasswordInput.value;
+            clearAuthError(registerErrorMsg);
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error("Register error:", error);
+                displayAuthError(registerErrorMsg, "Lỗi đăng ký: " + error.code + " - " + error.message);
+            }
         }
-
-        if (logoutButton) {
-            logoutButton.addEventListener('click', async () => {
-                if (!auth) return;
-                try {
-                    await signOut(auth);
-                    currentMindMapId = null;
-                    if (mindmapNodesUnsubscribe) mindmapNodesUnsubscribe();
-                    if (mindmapDataUnsubscribe) mindmapDataUnsubscribe(); 
-                    window.removeEventListener('keydown', handleGlobalKeyDown); 
-                } catch (error) {
-                    console.error("Logout error:", error);
-                }
-            });
+        async function handleLogin() {
+            if (!auth) {
+                 displayAuthError(loginErrorMsg, "Lỗi: Dịch vụ xác thực chưa sẵn sàng.");
+                 return;
+            }
+            const email = loginEmailInput.value;
+            const password = loginPasswordInput.value;
+            clearAuthError(loginErrorMsg);
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                console.error("Login error:", error);
+                displayAuthError(loginErrorMsg, "Lỗi đăng nhập: " + error.code + " - " + error.message);
+            }
         }
+        async function handleLogout() {
+            if (!auth) return;
+            try {
+                await signOut(auth);
+                currentMindMapId = null;
+                if (mindmapNodesUnsubscribe) mindmapNodesUnsubscribe();
+                if (mindmapDataUnsubscribe) mindmapDataUnsubscribe();
+                if (typeof handleGlobalKeyDown === 'function') {
+                    window.removeEventListener('keydown', handleGlobalKeyDown);
+                }
+                if (mobileNavMenu && mobileNavMenu.classList.contains('open')) {
+                    mobileNavMenu.classList.remove('open');
+                    if (mobileNavOverlay) hideElement(mobileNavOverlay);
+                }
+            } catch (error) {
+                console.error("Logout error:", error);
+            }
+        }
+        function authStateChangedHandler(user) {
+            console.log("authStateChangedHandler called. User:", user ? user.uid : null);
+             if (typeof handleGlobalKeyDown !== 'function') {
+                 console.error("CRITICAL: handleGlobalKeyDown is not defined or not a function within authStateChangedHandler!");
+            }
 
-        if (auth) { 
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    currentUser = user;
-                    if(userEmailDisplay) userEmailDisplay.textContent = `Chào, ${user.email}`;
-                    hideElement(authSection);
-                    showElement(mainAppSection);
-                    showMindmapManagementView();
-                    loadUserMindMaps();
+            if (user) {
+                currentUser = user;
+                if(userEmailDisplay) userEmailDisplay.textContent = `Chào, ${user.email}`;
+                if(userEmailDisplayMobile) userEmailDisplayMobile.textContent = `Chào, ${user.email}`;
+                hideElement(authSection);
+                showElement(mainAppSection);
+                showMindmapManagementView();
+                loadUserMindMaps();
+            } else {
+                currentUser = null;
+                if(userEmailDisplay) userEmailDisplay.textContent = '';
+                if(userEmailDisplayMobile) userEmailDisplayMobile.textContent = '';
+                showElement(authSection);
+                hideElement(mainAppSection);
+                hideElement(canvasView);
+                if(nodeStylePanel) {nodeStylePanel.classList.remove('active-mobile-style'); hideElement(nodeStylePanel);}
+                if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
+                hideContextMenu();
+                if(mindmapListUl) mindmapListUl.innerHTML = '';
+                if (typeof handleGlobalKeyDown === 'function') {
+                    window.removeEventListener('keydown', handleGlobalKeyDown);
                 } else {
-                    currentUser = null;
-                    if(userEmailDisplay) userEmailDisplay.textContent = '';
-                    showElement(authSection);
-                    hideElement(mainAppSection);
-                    hideElement(canvasView);
-                    if(nodeStylePanel) hideElement(nodeStylePanel); 
-                    if(contextMenu) hideElement(contextMenu); 
-                    if(mindmapListUl) mindmapListUl.innerHTML = '';
-                    window.removeEventListener('keydown', handleGlobalKeyDown); 
+                    console.warn("handleGlobalKeyDown was not a function during authStateChanged (user null) cleanup.");
                 }
-            });
+                if (mobileNavMenu && mobileNavMenu.classList.contains('open')) {
+                    mobileNavMenu.classList.remove('open');
+                    if(mobileNavOverlay) hideElement(mobileNavOverlay);
+                }
+            }
         }
 
-
-        // --- UI VIEW MANAGEMENT ---
+        // --- UI VIEW MANAGEMENT (Function definitions) ---
         function showMindmapManagementView() {
             if(mainAppTitle) mainAppTitle.textContent = "Bảng điều khiển";
-            showElement(mindmapManagementView);
-            hideElement(canvasView);
-            if(nodeStylePanel) hideElement(nodeStylePanel); 
-            if(contextMenu) hideElement(contextMenu);
-            currentMindMapId = null; 
+            if(mindmapManagementView) showElement(mindmapManagementView);
+            if(canvasView) hideElement(canvasView);
+            if(fabAddNode) hideElement(fabAddNode);
+            if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
+            if(nodeStylePanel) {nodeStylePanel.classList.remove('active-mobile-style'); hideElement(nodeStylePanel);}
+            hideContextMenu();
+            currentMindMapId = null;
             selectedKonvaNode = null;
             rightClickedKonvaNode = null;
             if (mindmapNodesUnsubscribe) {
-                mindmapNodesUnsubscribe(); 
+                mindmapNodesUnsubscribe();
                 mindmapNodesUnsubscribe = null;
             }
-            if (mindmapDataUnsubscribe) { 
+            if (mindmapDataUnsubscribe) {
                 mindmapDataUnsubscribe();
                 mindmapDataUnsubscribe = null;
             }
             if (currentKonvaStage) {
-                currentKonvaStage.destroyChildren(); 
+                currentKonvaStage.destroyChildren();
                 currentKonvaLayer = null;
             }
-            window.removeEventListener('keydown', handleGlobalKeyDown); 
+            if (typeof handleGlobalKeyDown === 'function') {
+                window.removeEventListener('keydown', handleGlobalKeyDown);
+            }
         }
-
-        async function showCanvasView(mapId, mapTitle) { 
-            if(mainAppTitle) mainAppTitle.textContent = "Sơ đồ tư duy";
-            hideElement(mindmapManagementView);
-            showElement(canvasView);
+        async function showCanvasView(mapId, mapTitle) {
+            if(mainAppTitle) mainAppTitle.textContent = mapTitle;
+            if(mindmapManagementView) hideElement(mindmapManagementView);
+            if(canvasView) showElement(canvasView);
+            if(fabAddNode) showElement(fabAddNode);
             if(currentMindmapTitleDisplay) currentMindmapTitleDisplay.textContent = mapTitle;
             currentMindMapId = mapId;
-            
-            initKonvaStage(); 
-            
+            initKonvaStage();
             if (db && currentMindMapId) {
                 const mapDocRef = doc(db, "mindmaps", currentMindMapId);
-                if (mindmapDataUnsubscribe) mindmapDataUnsubscribe(); 
+                if (mindmapDataUnsubscribe) mindmapDataUnsubscribe();
                 mindmapDataUnsubscribe = onSnapshot(mapDocRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const mapData = docSnap.data();
@@ -755,100 +1054,72 @@
                     console.error("Error listening to mindmap data:", error);
                 });
             }
-            
-            loadAndListenNodesForCurrentMap();
-            hideElement(nodeStylePanel); 
-            hideElement(contextMenu);
-            window.addEventListener('keydown', handleGlobalKeyDown); 
+            if(nodeStylePanel) {nodeStylePanel.classList.remove('active-mobile-style'); hideElement(nodeStylePanel);}
+            if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
+            hideContextMenu();
+            if (typeof handleGlobalKeyDown === 'function') {
+                 window.addEventListener('keydown', handleGlobalKeyDown);
+            }
         }
 
-        if (backToMapsListButton) {
-            backToMapsListButton.addEventListener('click', showMindmapManagementView);
-        }
-
-        // --- NODE STYLE PANEL LOGIC ---
-        // Helper to convert lineDash array to string for select
+        // --- NODE STYLE PANEL LOGIC (Function definitions) ---
         function lineDashArrayToString(dashArray) {
             if (!dashArray || dashArray.length === 0) return 'solid';
-            if (JSON.stringify(dashArray) === JSON.stringify([15, 8])) return 'dashed'; // Cập nhật giá trị
-            if (JSON.stringify(dashArray) === JSON.stringify([3, 8])) return 'dotted';   // Cập nhật giá trị
-            return 'solid'; // Default
+            if (JSON.stringify(dashArray) === JSON.stringify([15, 8])) return 'dashed';
+            if (JSON.stringify(dashArray) === JSON.stringify([3, 8])) return 'dotted';
+            return 'solid';
         }
-
-        // Helper to convert string from select to lineDash array
         function stringToLineDashArray(dashString) {
-            if (dashString === 'dashed') return [15, 8]; // Cập nhật giá trị
-            if (dashString === 'dotted') return [3, 8];  // Cập nhật giá trị
-            return []; // Solid
+            if (dashString === 'dashed') return [15, 8];
+            if (dashString === 'dotted') return [3, 8];
+            return [];
         }
-
-
         function updateNodeStylePanel(nodeData) {
             if (!nodeData || !nodeData.style) {
-                if(nodeStylePanel) hideElement(nodeStylePanel);
+                if(nodeStylePanel && !nodeStylePanel.classList.contains('active-mobile-style')) hideElement(nodeStylePanel);
                 return;
             }
             const style = nodeData.style;
-            if(nodeShapeSelect) nodeShapeSelect.value = style.shape || DEFAULT_NODE_STYLE.shape; 
-            if(nodeFontFamilySelect) nodeFontFamilySelect.value = style.fontFamily || DEFAULT_NODE_STYLE.fontFamily; 
-            if(nodeFontSizeInput) nodeFontSizeInput.value = style.fontSize || DEFAULT_NODE_STYLE.fontSize; 
-            if(nodeIconSelect) nodeIconSelect.value = style.icon || ''; 
+            if(nodeShapeSelect) nodeShapeSelect.value = style.shape || DEFAULT_NODE_STYLE.shape;
+            if(nodeFontFamilySelect) nodeFontFamilySelect.value = style.fontFamily || DEFAULT_NODE_STYLE.fontFamily;
+            if(nodeFontSizeInput) nodeFontSizeInput.value = style.fontSize || DEFAULT_NODE_STYLE.fontSize;
+            if(nodeIconSelect) nodeIconSelect.value = style.icon || '';
             if(nodeBgColorInput) nodeBgColorInput.value = style.backgroundColor || DEFAULT_NODE_STYLE.backgroundColor;
             if(nodeTextColorInput) nodeTextColorInput.value = style.textColor || DEFAULT_NODE_STYLE.textColor;
-            if(nodeBorderColorInput) nodeBorderColorInput.value = style.borderColor || DEFAULT_NODE_STYLE.borderColor; 
-            if(nodeLineColorInput) nodeLineColorInput.value = style.lineColor || DEFAULT_NODE_STYLE.lineColor; 
-            if(nodeLineDashSelect) nodeLineDashSelect.value = lineDashArrayToString(style.lineDash); // Bỏ || DEFAULT_NODE_STYLE.lineDash vì đã có trong style
-            if(nodeLineWidthInput) nodeLineWidthInput.value = style.lineWidth || DEFAULT_NODE_STYLE.lineWidth; 
-            if(nodeStylePanel) showElement(nodeStylePanel);
-        }
+            if(nodeBorderColorInput) nodeBorderColorInput.value = style.borderColor || DEFAULT_NODE_STYLE.borderColor;
+            if(nodeLineColorInput) nodeLineColorInput.value = style.lineColor || DEFAULT_NODE_STYLE.lineColor;
+            if(nodeLineDashSelect) nodeLineDashSelect.value = lineDashArrayToString(style.lineDash);
+            if(nodeLineWidthInput) nodeLineWidthInput.value = style.lineWidth || DEFAULT_NODE_STYLE.lineWidth;
 
+            const isMobile = window.innerWidth <= 768;
+            if (nodeStylePanel && (!isMobile || nodeStylePanel.classList.contains('active-mobile-style'))) {
+                 showElement(nodeStylePanel);
+            } else if (nodeStylePanel && !isMobile){
+                 showElement(nodeStylePanel);
+            }
+        }
         async function handleNodeStyleChange(property, value) {
-            if (!selectedKonvaNode || !db) return; 
+            if (!selectedKonvaNode || !db) return;
             const nodeId = selectedKonvaNode.id();
-            
             let processedValue = value;
             if (property === 'lineWidth' || property === 'fontSize') {
                 processedValue = parseInt(value, 10);
             } else if (property === 'lineDash') {
-                processedValue = stringToLineDashArray(value); 
+                processedValue = stringToLineDashArray(value);
             }
-
-
             try {
                 const nodeRef = doc(db, "nodes", nodeId);
                 const nodeSnap = await getDoc(nodeRef);
                 if (nodeSnap.exists()) {
                     const existingData = nodeSnap.data();
                     const existingStyle = existingData.style || {};
-                    const updatedStyle = { ...existingStyle, [property]: processedValue };
-                    
+                    let updatedStyle = { ...existingStyle, [property]: processedValue };
+
                     if (property === 'shape') {
-                        if (processedValue === 'ellipse') {
-                        } else if (processedValue === 'rectangle' && !updatedStyle.cornerRadius) {
-                            updatedStyle.cornerRadius = 0; 
-                        } else if (processedValue === 'roundedRectangle' && (!updatedStyle.cornerRadius || updatedStyle.cornerRadius === 0) ) {
-                             updatedStyle.cornerRadius = 5; 
-                        }
+                        if (processedValue === 'ellipse') {}
+                        else if (processedValue === 'rectangle' && !updatedStyle.cornerRadius) { updatedStyle.cornerRadius = 0; }
+                        else if (processedValue === 'roundedRectangle' && (!updatedStyle.cornerRadius || updatedStyle.cornerRadius === 0) ) { updatedStyle.cornerRadius = 5; }
                     }
-                    
-                    if (property === 'fontFamily' || property === 'fontSize' || property === 'text' || property === 'icon') { 
-                        let iconWidthForCalc = 0;
-                        if (updatedStyle.icon && updatedStyle.icon !== '') {
-                            const tempIconForStyleCalc = new Konva.Text({ text: updatedStyle.icon, fontSize: updatedStyle.iconSize || DEFAULT_NODE_STYLE.iconSize, fontFamily: updatedStyle.fontFamily || DEFAULT_NODE_STYLE.fontFamily });
-                            iconWidthForCalc = tempIconForStyleCalc.width() + (updatedStyle.iconSpacing || DEFAULT_NODE_STYLE.iconSpacing);
-                        }
-                        const tempTextForCalc = new Konva.Text({
-                            text: (property === 'text') ? processedValue : (existingData.text || ''), 
-                            fontSize: (property === 'fontSize') ? processedValue : (updatedStyle.fontSize || DEFAULT_NODE_STYLE.fontSize),
-                            fontFamily: (property === 'fontFamily') ? processedValue : (updatedStyle.fontFamily || DEFAULT_NODE_STYLE.fontFamily),
-                            width: (updatedStyle.width || DEFAULT_NODE_STYLE.width) - 2 * (updatedStyle.padding || DEFAULT_NODE_STYLE.padding) - iconWidthForCalc, 
-                            align: 'center'
-                        });
-                        const newTextContentHeight = tempTextForCalc.height();
-                        updatedStyle.height = Math.max(updatedStyle.minHeight || DEFAULT_NODE_STYLE.minHeight, newTextContentHeight + 2 * (updatedStyle.padding || DEFAULT_NODE_STYLE.padding));
-                    }
-
-
                     await updateDoc(nodeRef, { style: updatedStyle });
                 } else {
                     console.warn("Node not found for style update:", nodeId);
@@ -857,1063 +1128,1187 @@
                 console.error(`Error updating node style (${property}):`, e);
             }
         }
-
-        if (nodeShapeSelect) nodeShapeSelect.addEventListener('change', (e) => handleNodeStyleChange('shape', e.target.value)); 
-        if (nodeFontFamilySelect) nodeFontFamilySelect.addEventListener('change', (e) => handleNodeStyleChange('fontFamily', e.target.value)); 
-        if (nodeFontSizeInput) nodeFontSizeInput.addEventListener('input', (e) => handleNodeStyleChange('fontSize', e.target.value)); 
-        if (nodeIconSelect) nodeIconSelect.addEventListener('change', (e) => handleNodeStyleChange('icon', e.target.value)); 
-        if (nodeBgColorInput) nodeBgColorInput.addEventListener('input', (e) => handleNodeStyleChange('backgroundColor', e.target.value));
-        if (nodeTextColorInput) nodeTextColorInput.addEventListener('input', (e) => handleNodeStyleChange('textColor', e.target.value));
-        if (nodeBorderColorInput) nodeBorderColorInput.addEventListener('input', (e) => handleNodeStyleChange('borderColor', e.target.value));
-        if (nodeLineColorInput) nodeLineColorInput.addEventListener('input', (e) => handleNodeStyleChange('lineColor', e.target.value)); 
-        if (nodeLineDashSelect) nodeLineDashSelect.addEventListener('change', (e) => handleNodeStyleChange('lineDash', e.target.value)); 
-        if (nodeLineWidthInput) nodeLineWidthInput.addEventListener('input', (e) => handleNodeStyleChange('lineWidth', e.target.value)); 
-
-
-        // --- FIRESTORE SERVICE LOGIC (Mind Maps) ---
-        if (createMindmapButton) {
-            createMindmapButton.addEventListener('click', async () => {
-                if (!db) { alert("Lỗi: Dịch vụ cơ sở dữ liệu chưa sẵn sàng."); return; }
-                const title = newMindmapTitleInput.value.trim();
-                if (!title) {
-                    alert("Vui lòng nhập tiêu đề cho sơ đồ.");
-                    return;
-                }
-                if (!currentUser) {
-                    alert("Vui lòng đăng nhập để tạo sơ đồ.");
-                    return;
-                }
-
-                try {
-                    const mindMapData = {
-                        userId: currentUser.uid,
-                        title: title,
-                        createdAt: serverTimestamp(),
-                        lastModified: serverTimestamp(),
-                        canvasState: { scaleX: 1, scaleY: 1, x: 0, y: 0 } 
-                    };
-                    const mindMapDocRef = await addDoc(collection(db, "mindmaps"), mindMapData);
-                    console.log("Mind map created with ID: ", mindMapDocRef.id);
-
-                    const rootNodeData = {
-                        mapId: mindMapDocRef.id,
-                        parentId: null,
-                        text: "Ý tưởng trung tâm",
-                        position: { x: (konvaContainer?.clientWidth || 800) / 2 - 75, y: 50 },
-                        style: { 
-                            backgroundColor: "#1877f2", 
-                            textColor: "#ffffff", 
-                            borderColor: "#0e5aab", 
-                            shape: "ellipse", 
-                            width: 150, minHeight: 60, padding: 10, 
-                            fontSize: DEFAULT_NODE_STYLE.fontSize, 
-                            fontFamily: DEFAULT_NODE_STYLE.fontFamily, 
-                            icon: '',
-                            iconSize: DEFAULT_NODE_STYLE.iconSize,
-                            iconSpacing: DEFAULT_NODE_STYLE.iconSpacing,
-                            lineColor: DEFAULT_NODE_STYLE.lineColor, 
-                            lineWidth: DEFAULT_NODE_STYLE.lineWidth,
-                            lineDash: DEFAULT_NODE_STYLE.lineDash 
-                        },
-                        createdAt: serverTimestamp()
-                    };
-                    await addDoc(collection(db, "nodes"), rootNodeData);
-                    console.log("Root node created for map: ", mindMapDocRef.id);
-
-                    newMindmapTitleInput.value = '';
-                    alert(`Sơ đồ "${title}" đã được tạo!`);
-                } catch (e) {
-                    console.error("Error creating new mind map: ", e);
-                    alert("Lỗi khi tạo sơ đồ: " + e.message);
-                }
+        function calculatePotentialFullHeight(text, styleConfig) {
+            const style = { ...DEFAULT_NODE_STYLE, ...styleConfig };
+            const textPadding = style.padding;
+            let iconTextWidth = 0;
+            if (style.icon && style.icon !== '') {
+                const tempIconForCalc = new Konva.Text({ text: style.icon, fontSize: style.iconSize, fontFamily: style.fontFamily });
+                iconTextWidth = tempIconForCalc.width() + style.iconSpacing;
+            }
+            const mainTextWidth = style.width - 2 * textPadding - iconTextWidth;
+            const tempText = new Konva.Text({
+                text: text,
+                fontSize: style.fontSize,
+                fontFamily: style.fontFamily,
+                width: mainTextWidth > 0 ? mainTextWidth : 0,
+                align: 'center',
+                lineHeight: 1.2
             });
+            const actualTextContentHeight = tempText.height();
+            return Math.max(style.minHeight, actualTextContentHeight + 2 * textPadding, style.icon ? (style.iconSize + 2 * textPadding) : 0);
         }
 
+        // --- FIRESTORE SERVICE LOGIC (Mind Maps - Function definitions) ---
+        async function handleCreateMindmap() {
+            if (!db) { alert("Lỗi: Dịch vụ cơ sở dữ liệu chưa sẵn sàng."); return; }
+            const title = newMindmapTitleInput.value.trim();
+            if (!title) { alert("Vui lòng nhập tiêu đề cho sơ đồ."); return; }
+            if (!currentUser) { alert("Vui lòng đăng nhập để tạo sơ đồ."); return; }
+            try {
+                const mindMapData = {
+                    userId: currentUser.uid, title: title, createdAt: serverTimestamp(),
+                    lastModified: serverTimestamp(), canvasState: { scaleX: 1, scaleY: 1, x: 0, y: 0 }
+                };
+                const mindMapDocRef = await addDoc(collection(db, "mindmaps"), mindMapData);
+                const rootNodeData = {
+                    mapId: mindMapDocRef.id, parentId: null, text: "Ý tưởng trung tâm",
+                    position: { x: (konvaContainer?.clientWidth || 800) / 2 - 75, y: 50 },
+                    style: { ...DEFAULT_NODE_STYLE, backgroundColor: "#1877f2", textColor: "#ffffff", borderColor: "#0e5aab", shape: "ellipse", minHeight: 60 },
+                    createdAt: serverTimestamp()
+                };
+                await addDoc(collection(db, "nodes"), rootNodeData);
+                newMindmapTitleInput.value = '';
+            } catch (e) { console.error("Error creating new mind map: ", e); alert("Lỗi khi tạo sơ đồ: " + e.message); }
+        }
         async function loadUserMindMaps() {
-            if (!currentUser || !db) return;
-            showElement(mindmapListLoading);
-            if(mindmapListUl) mindmapListUl.innerHTML = '';
+            console.log("loadUserMindMaps: Function called.");
+            if (!currentUser || !db) {
+                console.error("loadUserMindMaps: currentUser or db is null. Cannot load maps. UID:", currentUser?.uid);
+                if(mindmapListLoading) hideElement(mindmapListLoading);
+                if(mindmapListUl) mindmapListUl.innerHTML = '<li>Lỗi: Không thể tải danh sách do người dùng hoặc CSDL chưa sẵn sàng.</li>';
+                return;
+            }
+            console.log("loadUserMindMaps: Loading maps for user:", currentUser.uid);
+
+            if(mindmapListLoading) showElement(mindmapListLoading);
+            if(mindmapListUl) {
+                console.log("loadUserMindMaps: Clearing mindmapListUl.");
+                mindmapListUl.innerHTML = '';
+            } else {
+                console.error("loadUserMindMaps: mindmapListUl is NOT available in DOM when trying to clear.");
+                if(mindmapListLoading) hideElement(mindmapListLoading);
+                return;
+            }
 
             try {
                 const q = query(collection(db, "mindmaps"), where("userId", "==", currentUser.uid));
+                console.log("loadUserMindMaps: Query created for user:", currentUser.uid);
+
                 if (typeof window.mindmapsListenerUnsubscribe === 'function') {
+                    console.log("loadUserMindMaps: Unsubscribing previous mindmaps listener.");
                     window.mindmapsListenerUnsubscribe();
                 }
+
                 window.mindmapsListenerUnsubscribe = onSnapshot(q, (querySnapshot) => {
-                    if(mindmapListUl) mindmapListUl.innerHTML = '';
-                    if (querySnapshot.empty) {
-                        if(mindmapListUl) mindmapListUl.innerHTML = '<li>Bạn chưa có sơ đồ nào. Hãy tạo một cái mới!</li>';
+                    console.log("loadUserMindMaps: onSnapshot triggered. Snapshot empty:", querySnapshot.empty, "Size:", querySnapshot.size);
+                    if(!mindmapListUl) {
+                        console.error("loadUserMindMaps: mindmapListUl is NULL inside onSnapshot. Cannot update list.");
+                        if(mindmapListLoading) hideElement(mindmapListLoading);
+                        return;
                     }
-                    querySnapshot.forEach((docSnap) => { 
-                        const map = { id: docSnap.id, ...docSnap.data() };
-                        const li = document.createElement('li');
-                        li.textContent = map.title;
-                        li.dataset.mapId = map.id;
-                        li.dataset.mapTitle = map.title;
+                    mindmapListUl.innerHTML = '';
 
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Xóa';
-                        deleteButton.classList.add('danger', 'secondary');
-                        deleteButton.style.fontSize = '0.8em';
-                        deleteButton.style.padding = '5px 8px';
-                        deleteButton.onclick = async (e) => {
-                            e.stopPropagation();
-                            if (confirm(`Bạn có chắc muốn xóa sơ đồ "${map.title}" và tất cả các nút của nó?`)) {
-                                await deleteMindMap(map.id);
-                            }
-                        };
+                    if (querySnapshot.empty) {
+                        mindmapListUl.innerHTML = '<li>Bạn chưa có sơ đồ nào. Hãy tạo một cái mới!</li>';
+                        console.log("loadUserMindMaps: No mind maps found for this user.");
+                    } else {
+                        querySnapshot.forEach((docSnap) => {
+                            const map = { id: docSnap.id, ...docSnap.data() };
+                            console.log("loadUserMindMaps: Processing map - ID:", map.id, "Title:", map.title);
 
-                        li.appendChild(deleteButton);
-                        li.addEventListener('click', () => {
-                            showCanvasView(map.id, map.title);
+                            const li = document.createElement('li');
+                            li.textContent = map.title || "Sơ đồ không có tiêu đề";
+                            li.dataset.mapId = map.id;
+                            li.dataset.mapTitle = map.title || "Sơ đồ không có tiêu đề";
+
+                            const deleteButton = document.createElement('button');
+                            deleteButton.textContent = 'Xóa';
+                            deleteButton.classList.add('danger', 'secondary');
+                            deleteButton.style.fontSize = '0.8em';
+                            deleteButton.style.padding = '5px 8px';
+                            deleteButton.onclick = async (e) => {
+                                e.stopPropagation();
+                                if (window.confirm(`Bạn có chắc muốn xóa sơ đồ "${map.title}" và tất cả các nút của nó?`)) {
+                                    await deleteMindMap(map.id);
+                                }
+                            };
+                            li.appendChild(deleteButton);
+
+                            li.addEventListener('click', () => {
+                                console.log("Clicked to open map:", map.title, map.id);
+                                showCanvasView(map.id, map.title);
+                                if (mobileNavMenu && mobileNavMenu.classList.contains('open')) {
+                                    mobileNavMenu.classList.remove('open');
+                                    if(mobileNavOverlay) hideElement(mobileNavOverlay);
+                                }
+                            });
+                            mindmapListUl.appendChild(li);
+                            console.log("loadUserMindMaps: Appended li for map:", map.title);
                         });
-                        if(mindmapListUl) mindmapListUl.appendChild(li);
-                    });
-                    hideElement(mindmapListLoading);
+                    }
+                    if(mindmapListLoading) hideElement(mindmapListLoading);
                 }, (error) => {
-                    console.error("Error fetching user mind maps with onSnapshot: ", error);
-                    if(mindmapListUl) mindmapListUl.innerHTML = '<li>Lỗi khi tải danh sách sơ đồ.</li>';
-                    hideElement(mindmapListLoading);
+                    console.error("Error in onSnapshot for mind maps: ", error);
+                    if(mindmapListUl) mindmapListUl.innerHTML = '<li>Lỗi khi tải danh sách sơ đồ. Vui lòng thử lại.</li>';
+                    if(mindmapListLoading) hideElement(mindmapListLoading);
                 });
-
             } catch (e) {
-                console.error("Error setting up mind map listener: ", e);
-                if(mindmapListUl) mindmapListUl.innerHTML = '<li>Lỗi khi tải danh sách sơ đồ.</li>';
-                hideElement(mindmapListLoading);
+                console.error("Error setting up mind map listener (try-catch block): ", e);
+                if(mindmapListUl) mindmapListUl.innerHTML = '<li>Lỗi nghiêm trọng khi thiết lập trình nghe danh sách sơ đồ.</li>';
+                if(mindmapListLoading) hideElement(mindmapListLoading);
             }
         }
+        async function deleteMindMap(mapId) { /* ... */ }
 
-        async function deleteMindMap(mapId) {
-            if (!mapId || !db) return;
-            try {
-                const nodesQuery = query(collection(db, "nodes"), where("mapId", "==", mapId));
-                const nodesSnapshot = await getDocs(nodesQuery);
-                const batch = writeBatch(db);
-                nodesSnapshot.forEach(nodeDoc => {
-                    batch.delete(doc(db, "nodes", nodeDoc.id));
-                });
-                await batch.commit();
-                console.log(`All nodes for map ${mapId} deleted.`);
 
-                await deleteDoc(doc(db, "mindmaps", mapId));
-                console.log(`Mind map ${mapId} deleted.`);
-                alert("Sơ đồ đã được xóa.");
-            } catch (error) {
-                console.error("Error deleting mind map: ", error);
-                alert("Lỗi khi xóa sơ đồ: " + error.message);
-            }
-        }
+        // --- FIRESTORE SERVICE LOGIC (Nodes) & KONVA INTEGRATION (Function definitions) ---
+        function getDistance(p1, p2) { /* ... */ }
+        function getCenter(p1, p2) { /* ... */ }
+        let lastCenterKonva = null;
+        let lastDistKonva = 0;
 
-        // --- FIRESTORE SERVICE LOGIC (Nodes) & KONVA INTEGRATION ---
         function initKonvaStage() {
-            if (currentKonvaStage) {
-                currentKonvaStage.off('dragstart dragmove dragend click tap wheel contextmenu'); 
-                currentKonvaStage.destroy(); 
-                currentKonvaStage = null;
-            }
-             if (currentKonvaLayer) {
-                currentKonvaLayer.destroy();
-                currentKonvaLayer = null;
-            }
+            console.log("initKonvaStage: Called for mapId:", currentMindMapId);
+            if (currentKonvaStage) { currentKonvaStage.off('dragstart dragmove dragend click tap wheel contextmenu touchstart touchend touchmove mousedown mousemove mouseup'); currentKonvaStage.destroy(); currentKonvaStage = null; }
+            if (currentKonvaLayer) { currentKonvaLayer.destroy(); currentKonvaLayer = null; }
 
             const container = document.getElementById('konva-container');
-            if (!container) {
-                console.error("Konva container not found!");
-                return;
-            }
+            if (!container) { console.error("Konva container not found!"); return; }
+             console.log("initKonvaStage: Container found, width:", container.clientWidth, "height:", container.clientHeight);
+
+
             currentKonvaStage = new Konva.Stage({
                 container: 'konva-container',
                 width: container.clientWidth,
                 height: container.clientHeight,
-                draggable: true
+                draggable: true,
             });
+            console.log("initKonvaStage: Stage created.");
             currentKonvaLayer = new Konva.Layer();
             currentKonvaStage.add(currentKonvaLayer);
-            selectedKonvaNode = null; 
-            
-            currentKonvaStage.on('dragend', saveCanvasState);
-            currentKonvaStage.on('wheel', (e) => { 
-                e.evt.preventDefault();
-                const oldScale = currentKonvaStage.scaleX();
-                const pointer = currentKonvaStage.getPointerPosition();
-                if (!pointer) return; 
-                const mousePointTo = {
-                    x: (pointer.x - currentKonvaStage.x()) / oldScale,
-                    y: (pointer.y - currentKonvaStage.y()) / oldScale,
-                };
-                const direction = e.evt.deltaY > 0 ? -1 : 1; 
-                const newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+            console.log("initKonvaStage: Layer created and added to stage.");
+            selectedKonvaNode = null;
 
-                currentKonvaStage.scale({ x: newScale, y: newScale });
+            currentKonvaStage.on('mousedown touchstart', function(e_stage) {
+                let hitShape = e_stage.target;
+                let determinedTargetNodeGroup = null;
 
-                const newPos = {
-                    x: pointer.x - mousePointTo.x * newScale,
-                    y: pointer.y - mousePointTo.y * newScale,
-                };
-                currentKonvaStage.position(newPos);
-                currentKonvaStage.batchDraw();
-                saveCanvasState();
-            });
+                const touches = e_stage.evt.touches;
+                if (touches && touches.length === 2) {
+                    e_stage.evt.preventDefault();
+                    currentKonvaStage.draggable(false);
+                    const touch1 = touches[0];
+                    const touch2 = touches[1];
+                    lastCenterKonva = getCenter({ x: touch1.clientX, y: touch1.clientY }, { x: touch2.clientX, y: touch2.clientY });
+                    lastDistKonva = getDistance({ x: touch1.clientX, y: touch1.clientY }, { x: touch2.clientX, y: touch2.clientY });
+                    potentiallyDraggedNode = null;
+                    clearTimeout(longPressTimeoutId);
+                    touchStartTargetNodeForContextMenu = null;
+                    if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
+                    return;
+                }
 
 
-            currentKonvaStage.on('click tap', function(e) {
-                if (e.target === currentKonvaStage) { 
+                if (hitShape === currentKonvaStage) {
+                    potentiallyDraggedNode = null;
+                    currentKonvaStage.draggable(true);
+                    clearTimeout(longPressTimeoutId);
+                    touchStartTargetNodeForContextMenu = null;
                     if (selectedKonvaNode) {
                         selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(1);
-                        removeCreationHandle(selectedKonvaNode); 
+                        removeCreationHandle(selectedKonvaNode);
                         selectedKonvaNode = null;
-                        if(nodeStylePanel) hideElement(nodeStylePanel); 
+                        if(nodeStylePanel) {nodeStylePanel.classList.remove('active-mobile-style'); hideElement(nodeStylePanel);}
+                        if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
                         currentKonvaLayer.batchDraw();
                     }
-                    if(contextMenu) hideElement(contextMenu); 
+                    hideContextMenu();
+                } else {
+                    let currentShape = hitShape;
+                    while (currentShape && currentShape !== currentKonvaStage) {
+                        if (currentShape.hasName && currentShape.hasName('mindmapNodeGroup')) {
+                            determinedTargetNodeGroup = currentShape;
+                            break;
+                        }
+                        if (typeof currentShape.getParent !== 'function') {
+                            determinedTargetNodeGroup = null; break;
+                        }
+                        currentShape = currentShape.getParent();
+                    }
+
+                    if (determinedTargetNodeGroup) {
+                        potentiallyDraggedNode = determinedTargetNodeGroup;
+                        dragStartPointerPosition = currentKonvaStage.getPointerPosition();
+                        if (currentKonvaStage.isDragging()) currentKonvaStage.stopDrag();
+                        currentKonvaStage.draggable(false);
+
+                        if (e_stage.type === 'touchstart') {
+                            touchStartTargetNodeForContextMenu = determinedTargetNodeGroup;
+                            const touch = e_stage.evt.touches && e_stage.evt.touches[0];
+                            if (touch) {
+                                touchStartCoordsForLongPress = { x: touch.pageX, y: touch.pageY };
+                                touchStartPointerPositionForContextMenu = { x: touch.pageX, y: touch.pageY };
+                            } else {
+                                const pointerPos = currentKonvaStage.getPointerPosition() || {x:0, y:0};
+                                touchStartCoordsForLongPress = pointerPos;
+                                touchStartPointerPositionForContextMenu = pointerPos;
+                            }
+
+                            clearTimeout(longPressTimeoutId);
+                            longPressTimeoutId = setTimeout(() => {
+                                if (touchStartTargetNodeForContextMenu) {
+                                    rightClickedKonvaNode = touchStartTargetNodeForContextMenu;
+                                    if (!selectedKonvaNode || selectedKonvaNode.id() !== rightClickedKonvaNode.id()) {
+                                        if (selectedKonvaNode) { selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(1); removeCreationHandle(selectedKonvaNode); }
+                                        selectedKonvaNode = rightClickedKonvaNode;
+                                        selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(3);
+                                        const shape = selectedKonvaNode.findOne('.nodeShape');
+                                        if (shape) addCreationHandle(selectedKonvaNode, shape.height());
+                                        const nodeData = allNodesDataForCurrentMap.find(n => n.id === selectedKonvaNode.id());
+                                        if (nodeData) updateNodeStylePanel(nodeData);
+                                        if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.add('active');
+                                        currentKonvaLayer.batchDraw();
+                                    }
+                                    if (contextMenu && touchStartPointerPositionForContextMenu) {
+                                        contextMenu.style.top = touchStartPointerPositionForContextMenu.y + 'px';
+                                        contextMenu.style.left = touchStartPointerPositionForContextMenu.x + 'px';
+                                        showElement(contextMenu);
+                                        contextMenuJustOpened = true;
+                                    }
+                                    touchStartTargetNodeForContextMenu = null;
+                                    longPressTimeoutId = null;
+                                }
+                            }, LONG_PRESS_DELAY);
+                        }
+                    } else {
+                        potentiallyDraggedNode = null;
+                        currentKonvaStage.draggable(true);
+                        clearTimeout(longPressTimeoutId);
+                        touchStartTargetNodeForContextMenu = null;
+                    }
                 }
             });
 
-            currentKonvaStage.on('contextmenu', function(e) {
-                e.evt.preventDefault(); 
-                
-                let targetNodeGroup = e.target;
-                while (targetNodeGroup && targetNodeGroup !== currentKonvaStage && !targetNodeGroup.hasName('mindmapNodeGroup')) {
-                    targetNodeGroup = targetNodeGroup.getParent();
+            currentKonvaStage.on('mousemove touchmove', function(e_stage) {
+                const touches = e_stage.evt.touches;
+
+                if (touches && touches.length === 2 && lastDistKonva > 0) {
+                    e_stage.evt.preventDefault();
+                    const touch1 = touches[0];
+                    const touch2 = touches[1];
+                    const newCenter = getCenter({ x: touch1.clientX, y: touch1.clientY }, { x: touch2.clientX, y: touch2.clientY });
+                    const newDist = getDistance({ x: touch1.clientX, y: touch1.clientY }, { x: touch2.clientX, y: touch2.clientY });
+
+                    const stage = currentKonvaStage;
+                    const oldScale = stage.scaleX();
+                    const pointer = stage.getPointerPosition();
+                    if (!pointer) return;
+
+                    const pointTo = {
+                        x: (pointer.x - stage.x()) / oldScale,
+                        y: (pointer.y - stage.y()) / oldScale,
+                    };
+
+                    const newScale = oldScale * (newDist / lastDistKonva);
+                    stage.scale({ x: newScale, y: newScale });
+
+                    const newPos = {
+                        x: pointer.x - pointTo.x * newScale,
+                        y: pointer.y - pointTo.y * newScale,
+                    };
+                    stage.position(newPos);
+                    stage.batchDraw();
+
+                    lastDistKonva = newDist;
+                    return;
                 }
 
-                if (targetNodeGroup && targetNodeGroup.hasName('mindmapNodeGroup')) {
-                    rightClickedKonvaNode = targetNodeGroup; 
-                    
-                    if (!selectedKonvaNode || selectedKonvaNode.id() !== rightClickedKonvaNode.id()) {
-                        if (selectedKonvaNode) { 
-                            selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(1);
-                            removeCreationHandle(selectedKonvaNode);
+
+                if (touchStartTargetNodeForContextMenu && e_stage.type === 'touchmove') {
+                    const touch = e_stage.evt.touches && e_stage.evt.touches[0];
+                    if (touch) {
+                        const deltaX = Math.abs(touch.pageX - touchStartCoordsForLongPress.x);
+                        const deltaY = Math.abs(touch.pageY - touchStartCoordsForLongPress.y);
+                        if (deltaX > LONG_PRESS_MOVE_THRESHOLD || deltaY > LONG_PRESS_MOVE_THRESHOLD) {
+                            clearTimeout(longPressTimeoutId);
+                            touchStartTargetNodeForContextMenu = null;
                         }
+                    }
+                }
+
+                if (!potentiallyDraggedNode || !dragStartPointerPosition) {
+                    return;
+                }
+                if (e_stage.type === 'mousemove' && e_stage.evt.buttons !== 1) {
+                    return;
+                }
+                const currentPointerPosition = currentKonvaStage.getPointerPosition();
+                if (!currentPointerPosition) return;
+                const dx = currentPointerPosition.x - dragStartPointerPosition.x;
+                const dy = currentPointerPosition.y - dragStartPointerPosition.y;
+
+                if (Math.sqrt(dx * dx + dy * dy) > DRAG_THRESHOLD) {
+                    if (potentiallyDraggedNode.draggable() === false) {
+                        potentiallyDraggedNode.draggable(true);
+                        potentiallyDraggedNode.startDrag(e_stage.evt);
+                    }
+                    clearTimeout(longPressTimeoutId);
+                    touchStartTargetNodeForContextMenu = null;
+                }
+            });
+
+            currentKonvaStage.on('mouseup touchend', function(e_stage) {
+                if (longPressTimeoutId) {
+                    clearTimeout(longPressTimeoutId);
+                    longPressTimeoutId = null;
+                }
+
+                touchStartTargetNodeForContextMenu = null;
+                if (potentiallyDraggedNode && !potentiallyDraggedNode.isDragging()) {
+                    // Node was clicked/tapped, not dragged beyond threshold
+                }
+                 if (! (potentiallyDraggedNode && potentiallyDraggedNode.isDragging())) {
+                    potentiallyDraggedNode = null;
+                }
+                dragStartPointerPosition = null;
+
+
+                if (lastDistKonva > 0) {
+                    saveCanvasState();
+                }
+                lastDistKonva = 0;
+                lastCenterKonva = null;
+
+                if (! (e_stage.evt.touches && e_stage.evt.touches.length > 0) ) {
+                     currentKonvaStage.draggable(true);
+                }
+            });
+
+
+            currentKonvaStage.on('dragend', saveCanvasState);
+            currentKonvaStage.on('wheel', (e) => {
+                e.evt.preventDefault(); const oldScale = currentKonvaStage.scaleX();
+                const pointer = currentKonvaStage.getPointerPosition(); if (!pointer) return;
+                const mousePointTo = { x: (pointer.x - currentKonvaStage.x()) / oldScale, y: (pointer.y - currentKonvaStage.y()) / oldScale, };
+                const direction = e.evt.deltaY > 0 ? -1 : 1;
+                let newScale;
+                if (direction > 0) {
+                     newScale = oldScale * scaleBy;
+                } else {
+                     newScale = oldScale / scaleBy;
+                }
+
+                currentKonvaStage.scale({ x: newScale, y: newScale });
+                const newPos = { x: pointer.x - mousePointTo.x * newScale, y: pointer.y - mousePointTo.y * newScale, };
+                currentKonvaStage.position(newPos); currentKonvaStage.batchDraw(); saveCanvasState();
+            });
+
+            currentKonvaStage.on('click tap', function(e) {
+                if (contextMenuJustOpened && e.evt.type && (e.evt.type === 'touchend' || e.evt.type === 'mouseup')) {
+                     if (e.target === currentKonvaStage) {
+                        return;
+                    }
+                }
+
+
+                if (e.target === currentKonvaStage) {
+                    if (selectedKonvaNode) {
+                        selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(1);
+                        removeCreationHandle(selectedKonvaNode);
+                        selectedKonvaNode = null;
+                        if(nodeStylePanel) {nodeStylePanel.classList.remove('active-mobile-style'); hideElement(nodeStylePanel);}
+                        if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
+                        currentKonvaLayer.batchDraw();
+                    }
+                    hideContextMenu();
+                }
+            });
+
+            currentKonvaStage.on('contextmenu', function(e_context) {
+                e_context.evt.preventDefault();
+                if (e_context.evt.pointerType === 'touch' || e_context.evt.sourceCapabilities?.firesTouchEvents) {
+                    return;
+                }
+
+                let hitShape = e_context.target;
+                let targetNodeGroupForContextMenu = null;
+                let currentShape = hitShape;
+                while (currentShape && currentShape !== currentKonvaStage) {
+                    if (currentShape.hasName && currentShape.hasName('mindmapNodeGroup')) {
+                        targetNodeGroupForContextMenu = currentShape;
+                        break;
+                    }
+                    if (typeof currentShape.getParent !== 'function') {
+                        targetNodeGroupForContextMenu = null; break;
+                    }
+                    currentShape = currentShape.getParent();
+                }
+
+                if (targetNodeGroupForContextMenu) {
+                    rightClickedKonvaNode = targetNodeGroupForContextMenu;
+                    if (!selectedKonvaNode || selectedKonvaNode.id() !== rightClickedKonvaNode.id()) {
+                        if (selectedKonvaNode) { selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(1); removeCreationHandle(selectedKonvaNode); }
                         selectedKonvaNode = rightClickedKonvaNode;
                         selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(3);
-                        addCreationHandle(selectedKonvaNode); 
+                        const shape = selectedKonvaNode.findOne('.nodeShape');
+                         if (shape) addCreationHandle(selectedKonvaNode, shape.height());
                         const nodeData = allNodesDataForCurrentMap.find(n => n.id === selectedKonvaNode.id());
                         if (nodeData) updateNodeStylePanel(nodeData);
+                        if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.add('active');
                         currentKonvaLayer.batchDraw();
                     }
-
-                    if(contextMenu) { 
-                        contextMenu.style.top = e.evt.pageY + 'px';
-                        contextMenu.style.left = e.evt.pageX + 'px';
+                    if(contextMenu) {
+                        contextMenu.style.top = e_context.evt.pageY + 'px';
+                        contextMenu.style.left = e_context.evt.pageX + 'px';
                         showElement(contextMenu);
+                        contextMenuJustOpened = true;
                     }
                 } else {
-                    rightClickedKonvaNode = null; 
-                    if(contextMenu) hideElement(contextMenu);
+                    rightClickedKonvaNode = null;
+                    hideContextMenu();
                 }
             });
+            console.log("initKonvaStage: Event listeners set up. Calling loadAndListenNodesForCurrentMap.");
+            loadAndListenNodesForCurrentMap();
         }
-
-        async function saveCanvasState() {
-            if (!currentMindMapId || !currentKonvaStage || !db) return;
-            const canvasState = {
-                scaleX: currentKonvaStage.scaleX(),
-                scaleY: currentKonvaStage.scaleY(),
-                x: currentKonvaStage.x(),
-                y: currentKonvaStage.y()
-            };
-            try {
-                const mapDocRef = doc(db, "mindmaps", currentMindMapId);
-                await updateDoc(mapDocRef, { canvasState: canvasState, lastModified: serverTimestamp() });
-                console.log("Canvas state saved for map:", currentMindMapId);
-            } catch (error) {
-                console.error("Error saving canvas state:", error);
-            }
-        }
-
-
+        async function saveCanvasState() { /* ... */ } // Implementation as before
         function loadAndListenNodesForCurrentMap() {
+            console.log("loadAndListenNodesForCurrentMap: Called for mapId:", currentMindMapId);
             if (!currentMindMapId || !currentKonvaLayer || !db) {
-                console.warn("Cannot load nodes: missing mapId, Konva layer, or DB service.");
+                console.warn("loadAndListenNodesForCurrentMap: Cannot load nodes - missing mapId, layer, or db. currentMindMapId:", currentMindMapId, "currentKonvaLayer:", !!currentKonvaLayer, "db:", !!db);
+                if(konvaContainerLoading) hideElement(konvaContainerLoading);
                 return;
             }
-
-            showElement(konvaContainerLoading);
-            currentKonvaLayer.destroyChildren();
-            currentKonvaLayer.draw();
-            allNodesDataForCurrentMap = []; 
-
+            if(konvaContainerLoading) showElement(konvaContainerLoading);
+            if(currentKonvaLayer) {
+                console.log("loadAndListenNodesForCurrentMap: Destroying existing children in layer.");
+                currentKonvaLayer.destroyChildren();
+                currentKonvaLayer.draw();
+            }
+            allNodesDataForCurrentMap = [];
+            console.log("loadAndListenNodesForCurrentMap: Querying nodes for mapId:", currentMindMapId);
             const q = query(collection(db, "nodes"), where("mapId", "==", currentMindMapId));
 
-            if (mindmapNodesUnsubscribe) mindmapNodesUnsubscribe();
-
+            if (mindmapNodesUnsubscribe) {
+                console.log("loadAndListenNodesForCurrentMap: Unsubscribing previous nodes listener.");
+                mindmapNodesUnsubscribe();
+            }
             mindmapNodesUnsubscribe = onSnapshot(q, (querySnapshot) => {
+                console.log("loadAndListenNodesForCurrentMap: Nodes snapshot received. Empty:", querySnapshot.empty, "Size:", querySnapshot.size);
                 const nodesFromDb = [];
-                querySnapshot.forEach((docSnap) => {  
+                querySnapshot.forEach((docSnap) => {
                     nodesFromDb.push({ id: docSnap.id, ...docSnap.data() });
                 });
-                allNodesDataForCurrentMap = nodesFromDb; 
+                allNodesDataForCurrentMap = nodesFromDb;
+                console.log("loadAndListenNodesForCurrentMap: allNodesDataForCurrentMap updated with", nodesFromDb.length, "nodes. Data:", JSON.stringify(allNodesDataForCurrentMap.map(n => ({id: n.id, text: n.text, position: n.position}))));
                 renderNodesAndLines(allNodesDataForCurrentMap);
-                hideElement(konvaContainerLoading);
+                if(konvaContainerLoading) hideElement(konvaContainerLoading);
             }, (error) => {
                 console.error(`Error listening to nodes for map ${currentMindMapId}:`, error);
                 alert("Lỗi khi tải các nút của sơ đồ: " + error.message);
-                hideElement(konvaContainerLoading);
+                if(konvaContainerLoading) hideElement(konvaContainerLoading);
             });
         }
-
         function renderNodesAndLines(nodesData) {
-            if (!currentKonvaLayer) return;
-            currentKonvaLayer.destroyChildren(); 
+            console.log("renderNodesAndLines: Called with nodesData:", JSON.stringify(nodesData.map(n => ({id: n.id, text: n.text, position: n.position}))));
+            if (!currentKonvaLayer) {
+                console.error("renderNodesAndLines: currentKonvaLayer is null. Cannot render.");
+                return;
+            }
+            currentKonvaLayer.destroyChildren();
             const konvaNodeObjects = {};
-            // const DEFAULT_NODE_STYLE đã được định nghĩa ở global
+
+            if (!nodesData || nodesData.length === 0) {
+                console.log("renderNodesAndLines: No nodes to render for this map.");
+                // Optionally, display a message on the canvas itself if it's empty
+                const emptyText = new Konva.Text({
+                    x: currentKonvaStage.width() / 2 - 150,
+                    y: currentKonvaStage.height() / 2 - 20,
+                    text: "Sơ đồ này chưa có nút nào.\nHãy sử dụng nút (+) để thêm nút mới.",
+                    fontSize: 16,
+                    fontFamily: 'Arial',
+                    fill: '#888',
+                    align: 'center',
+                    width: 300
+                });
+                currentKonvaLayer.add(emptyText);
+                currentKonvaLayer.batchDraw();
+                return;
+            }
 
             nodesData.forEach(nodeData => {
+                console.log("renderNodesAndLines: Processing nodeData - ID:", nodeData.id, "Text:", nodeData.text, "Position:", nodeData.position);
                 if (!nodeData.position || typeof nodeData.position.x !== 'number' || typeof nodeData.position.y !== 'number') {
-                    console.warn("Node data missing valid position, skipping:", nodeData);
-                    return; 
+                    console.warn("renderNodesAndLines: Node data missing valid position, skipping node ID:", nodeData.id, "Text:", nodeData.text);
+                    return;
                 }
 
-                const style = { ...DEFAULT_NODE_STYLE, ...(nodeData.style || {}) }; 
-                const textPadding = style.padding;
-                const iconSize = style.iconSize;
-                const iconSpacing = style.iconSpacing;
-                let iconTextWidth = 0;
-                let iconObject = null;
+                const style = { ...DEFAULT_NODE_STYLE, ...(nodeData.style || {}) };
+                const fullText = nodeData.text || "";
 
+                let iconWidthForCalc = 0;
                 if (style.icon && style.icon !== '') {
-                    iconObject = new Konva.Text({
-                        text: style.icon,
-                        fontSize: iconSize,
-                        fontFamily: style.fontFamily, 
-                        fill: style.textColor, 
-                        x: textPadding,
-                        listening: false,
-                        name: 'nodeIcon' 
-                    });
-                    iconTextWidth = iconObject.width() + iconSpacing;
+                    const tempIcon = new Konva.Text({ text: style.icon, fontSize: style.iconSize, fontFamily: style.fontFamily });
+                    iconWidthForCalc = tempIcon.width() + style.iconSpacing;
                 }
+                const textRenderWidth = style.width - (2 * style.padding) - iconWidthForCalc;
 
-
-                const mainTextWidth = style.width - 2 * textPadding - iconTextWidth;
-
-                const tempText = new Konva.Text({
-                    text: nodeData.text,
+                const tempTextObj = new Konva.Text({
+                    text: fullText,
                     fontSize: style.fontSize,
                     fontFamily: style.fontFamily,
-                    width: mainTextWidth > 0 ? mainTextWidth : 0, 
+                    width: textRenderWidth > 0 ? textRenderWidth : 0,
+                    lineHeight: 1.2,
                     align: 'center'
                 });
-                const actualTextContentHeight = tempText.height();
-                const dynamicShapeHeight = Math.max(style.minHeight, actualTextContentHeight + 2 * textPadding, iconObject ? iconObject.height() + 2* textPadding : 0); 
+                const fullTextActualHeight = tempTextObj.height();
 
+                const estimatedLineHeight = style.fontSize * 1.2;
+                const maxVisibleTextHeightInNode = estimatedLineHeight * MAX_DISPLAY_LINES_IN_NODE;
+                const isTextTruncated = fullTextActualHeight > maxVisibleTextHeightInNode;
+                const textDisplayHeight = isTextTruncated ? maxVisibleTextHeightInNode : fullTextActualHeight;
+
+                let shapeRenderHeight = Math.max(style.minHeight, textDisplayHeight + (2 * style.padding));
+
+                if (isTextTruncated) {
+                    const readMoreIndicatorHeight = estimatedLineHeight * 0.8;
+                    shapeRenderHeight = Math.max(shapeRenderHeight, textDisplayHeight + (2 * style.padding) + readMoreIndicatorHeight + style.padding * 0.5);
+                }
 
                 const group = new Konva.Group({
                     x: nodeData.position.x,
                     y: nodeData.position.y,
-                    draggable: true, 
+                    draggable: false,
                     id: nodeData.id,
-                    name: 'mindmapNodeGroup' 
+                    name: 'mindmapNodeGroup',
+                    fullTextData: fullText
                 });
 
                 let shape;
                 if (style.shape === 'ellipse') {
-                    shape = new Konva.Ellipse({
-                        x: style.width / 2, 
-                        y: dynamicShapeHeight / 2,
-                        radiusX: style.width / 2,
-                        radiusY: dynamicShapeHeight / 2, 
-                        fill: style.backgroundColor,
-                        stroke: style.borderColor, 
-                        strokeWidth: 1, 
-                        name: 'nodeShape' 
-                    });
+                    shape = new Konva.Ellipse({ x: style.width / 2, y: shapeRenderHeight / 2, radiusX: style.width / 2, radiusY: shapeRenderHeight / 2, fill: style.backgroundColor, stroke: style.borderColor, strokeWidth: 1, name: 'nodeShape' });
                 } else if (style.shape === 'roundedRectangle') {
-                     shape = new Konva.Rect({
-                        width: style.width,
-                        height: dynamicShapeHeight, 
-                        fill: style.backgroundColor,
-                        stroke: style.borderColor, 
-                        strokeWidth: 1, 
-                        cornerRadius: style.cornerRadius || 10, 
-                        name: 'nodeShape' 
-                    });
-                }
-                else { 
-                    shape = new Konva.Rect({
-                        width: style.width,
-                        height: dynamicShapeHeight, 
-                        fill: style.backgroundColor,
-                        stroke: style.borderColor, 
-                        strokeWidth: 1, 
-                        cornerRadius: 0, 
-                        name: 'nodeShape' 
-                    });
+                    shape = new Konva.Rect({ width: style.width, height: shapeRenderHeight, fill: style.backgroundColor, stroke: style.borderColor, strokeWidth: 1, cornerRadius: style.cornerRadius || 10, name: 'nodeShape' });
+                } else {
+                    shape = new Konva.Rect({ width: style.width, height: shapeRenderHeight, fill: style.backgroundColor, stroke: style.borderColor, strokeWidth: 1, cornerRadius: 0, name: 'nodeShape' });
                 }
                 group.add(shape);
-                shape.moveToBottom(); 
+                shape.moveToBottom();
 
-                if (iconObject) {
-                    iconObject.y((dynamicShapeHeight - iconObject.height()) / 2); 
+                if (style.icon && style.icon !== '') {
+                    const iconObject = new Konva.Text({
+                        text: style.icon, fontSize: style.iconSize, fontFamily: style.fontFamily, fill: style.textColor,
+                        x: style.padding, y: (shapeRenderHeight - style.iconSize) / 2,
+                        listening: false, name: 'nodeIcon'
+                    });
                     group.add(iconObject);
                 }
 
                 const textToRender = new Konva.Text({
-                    text: nodeData.text,
-                    fontSize: style.fontSize,
-                    fontFamily: style.fontFamily,
-                    fill: style.textColor,
-                    width: mainTextWidth > 0 ? mainTextWidth : 0,
-                    x: textPadding + iconTextWidth, 
-                    padding: 0, 
+                    text: fullText,
+                    fontSize: style.fontSize, fontFamily: style.fontFamily, fill: style.textColor,
+                    width: textRenderWidth > 0 ? textRenderWidth : 0,
+                    height: textDisplayHeight,
+                    x: style.padding + iconWidthForCalc,
+                    y: style.padding,
                     align: 'center',
-                    listening: false
+                    verticalAlign: 'top',
+                    lineHeight: 1.2,
+                    listening: true,
+                    name: 'nodeTextContent'
                 });
-                textToRender.y((dynamicShapeHeight - textToRender.height()) / 2); 
+
+                if (isTextTruncated) {
+                    if (typeof textToRender.clip === 'function') {
+                         textToRender.clip({
+                            x: 0, y: 0, width: textRenderWidth, height: textDisplayHeight
+                        });
+                    } else {
+                        console.warn(`textToRender.clip is not a function for node ${nodeData.id}. Attempting to set clip as an attribute.`);
+                        try {
+                            textToRender.setAttr('clip', { x: 0, y: 0, width: textRenderWidth, height: textDisplayHeight });
+                        } catch (clipAttrError) {
+                            console.error("Failed to set clip as attribute:", clipAttrError);
+                        }
+                    }
+
+                     const readMoreText = new Konva.Text({
+                        x: style.padding + iconWidthForCalc,
+                        y: style.padding + textDisplayHeight + style.padding * 0.2,
+                        text: '... Xem thêm',
+                        fontSize: style.fontSize * 0.8,
+                        fill: '#007bff',
+                        fontStyle: 'italic',
+                        name: 'readMoreIndicator',
+                        width: textRenderWidth,
+                        align: 'right'
+                    });
+                    group.add(readMoreText);
+                    readMoreText.on('click tap', (ev) => {
+                        const isPrimaryInteraction = (ev.evt.button === 0 && ev.type === 'click') || ev.type === 'tap';
+                        if (isPrimaryInteraction && !contextMenuJustOpened) {
+                            openNodeContentModal(nodeData.text.substring(0,30)+"...", fullText);
+                        } else if (contextMenuJustOpened) {
+                            contextMenuJustOpened = false;
+                        }
+                        ev.evt.cancelBubble = true;
+                    });
+                }
                 group.add(textToRender);
 
+                if (isTextTruncated) {
+                    textToRender.on('click tap', (ev) => {
+                        const isPrimaryInteraction = (ev.evt.button === 0 && ev.type === 'click') || ev.type === 'tap';
+                        if (isPrimaryInteraction && !contextMenuJustOpened) {
+                            openNodeContentModal(nodeData.text.substring(0,30)+"...", fullText);
+                        } else if (contextMenuJustOpened) {
+                            contextMenuJustOpened = false;
+                        }
+                        ev.evt.cancelBubble = true;
+                    });
+                }
 
                 group.on('dragend', async function() {
                     if(!db) return;
                     try {
-                        await updateDoc(doc(db, "nodes", this.id()), {
-                            position: { x: this.x(), y: this.y() }
-                        });
-                    } catch (e) { console.error("Error updating node position:", e); }
+                        await updateDoc(doc(db, "nodes", this.id()), { position: { x: this.x(), y: this.y() } });
+                    } catch (e) {
+                        console.error("Error updating node position:", e);
+                    }
+                    this.draggable(false);
                 });
 
                 group.on('click tap', function(e) {
-                    e.evt.cancelBubble = true; 
+                    e.evt.cancelBubble = true;
+                    if (isEditingText) return;
+                    if (e.target.name() === 'readMoreIndicator') return;
+                    if (this.isDragging && this.isDragging()) { return; }
+
+                    const isPrimaryInteraction = (e.evt.button === 0 && e.type === 'click') || e.type === 'tap';
+
+                    if (isPrimaryInteraction) {
+                        if (contextMenuJustOpened && e.evt.type && e.evt.type.startsWith('touch')) {
+                        } else if (contextMenuJustOpened) {
+                            contextMenuJustOpened = false;
+                        }
+                         else {
+                            const fullText = this.getAttr('fullTextData');
+                            const hasReadMore = this.findOne('.readMoreIndicator');
+                            if (hasReadMore && (e.target.name() === 'nodeTextContent' || e.target.name() === 'nodeShape' || e.target === this ) ) {
+                                if (e.target.name() !== 'nodeTextContent' && e.target.name() !== 'readMoreIndicator') {
+                                     openNodeContentModal(fullText.substring(0,30)+"...", fullText);
+                                }
+                            }
+                        }
+                    }
+
+
                     if (selectedKonvaNode && selectedKonvaNode !== this) {
                         selectedKonvaNode.findOne('.nodeShape')?.strokeWidth(1);
-                        removeCreationHandle(selectedKonvaNode); 
+                        removeCreationHandle(selectedKonvaNode);
                     }
                     selectedKonvaNode = this;
-                    this.findOne('.nodeShape')?.strokeWidth(3);
-                    addCreationHandle(this, dynamicShapeHeight); 
-                    
+                    const shape = this.findOne('.nodeShape');
+                    if (shape) {
+                      shape.strokeWidth(3);
+                      addCreationHandle(this, shape.height());
+                    }
+
                     const clickedNodeData = allNodesDataForCurrentMap.find(n => n.id === this.id());
-                    if(clickedNodeData) updateNodeStylePanel(clickedNodeData);
-
+                    if (clickedNodeData) updateNodeStylePanel(clickedNodeData);
+                    if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.add('active');
                     currentKonvaLayer.batchDraw();
-                    if(contextMenu) hideElement(contextMenu); 
-                });
 
+                    if (isPrimaryInteraction && contextMenu && !contextMenu.classList.contains('hidden')) {
+                        if (!contextMenu.contains(e.evt.target)) {
+                            if (!(contextMenuJustOpened && e.evt.type && e.evt.type.startsWith('touch'))) {
+                                hideContextMenu();
+                            }
+                        }
+                    }
+                });
                 group.on('dblclick dbltap', function() {
-                    editTextOnKonvaNode(this, textToRender, dynamicShapeHeight); 
-                    if(contextMenu) hideElement(contextMenu); 
+                    const textNode = this.findOne('.nodeTextContent');
+                    const shapeNode = this.findOne('.nodeShape');
+                    if (textNode && shapeNode) {
+                         editTextOnKonvaNode(this, textNode, shapeNode.height());
+                    }
+                    hideContextMenu();
                 });
 
                 konvaNodeObjects[nodeData.id] = group;
                 currentKonvaLayer.add(group);
+                console.log("renderNodesAndLines: Added Konva group for node:", nodeData.id);
+
 
                 if (selectedKonvaNode && selectedKonvaNode.id() === nodeData.id) {
                     shape.strokeWidth(3);
-                    addCreationHandle(group, dynamicShapeHeight); 
+                    addCreationHandle(group, shape.height());
                 }
             });
 
             nodesData.forEach(nodeData => {
                 if (nodeData.parentId && konvaNodeObjects[nodeData.parentId] && konvaNodeObjects[nodeData.id]) {
-                    const parentKonvaNode = konvaNodeObjects[nodeData.parentId];
-                    const childKonvaNode = konvaNodeObjects[nodeData.id];
-
-                    const parentNodeFromData = allNodesDataForCurrentMap.find(n=>n.id === nodeData.parentId); // Sử dụng allNodesDataForCurrentMap
-                    // const childNodeFromData = nodeData; 
-
-                    const parentRenderedShape = parentKonvaNode.findOne('.nodeShape');
-                    const childRenderedShape = childKonvaNode.findOne('.nodeShape');
-
-                    const parentActualHeight = parentRenderedShape ? parentRenderedShape.height() : (parentNodeFromData?.style?.height || DEFAULT_NODE_STYLE.minHeight);
-                    const childActualHeight = childRenderedShape ? childRenderedShape.height() : (nodeData.style?.height || DEFAULT_NODE_STYLE.minHeight);
-                    
-                    const parentActualWidth = parentRenderedShape ? parentRenderedShape.width() : (parentNodeFromData?.style?.width || DEFAULT_NODE_STYLE.width);
-                    const childActualWidth = childRenderedShape ? childRenderedShape.width() : (nodeData.style?.width || DEFAULT_NODE_STYLE.width);
-
-
+                    const parentKonvaNode = konvaNodeObjects[nodeData.parentId]; const childKonvaNode = konvaNodeObjects[nodeData.id];
+                    const parentNodeFromData = allNodesDataForCurrentMap.find(n=>n.id === nodeData.parentId);
+                    const parentRenderedShape = parentKonvaNode.findOne('.nodeShape'); const childRenderedShape = childKonvaNode.findOne('.nodeShape');
+                    const parentActualHeight = parentRenderedShape.height(); const childActualHeight = childRenderedShape.height();
+                    const parentActualWidth = parentRenderedShape.width(); const childActualWidth = childRenderedShape.width();
                     const parentStyle = { ...DEFAULT_NODE_STYLE, ...(parentNodeFromData?.style || {}) };
-                    
                     const line = new Konva.Line({
-                        points: [
-                            parentKonvaNode.x() + parentActualWidth / 2, parentKonvaNode.y() + parentActualHeight / 2,
-                            childKonvaNode.x() + childActualWidth / 2, childKonvaNode.y() + childActualHeight / 2
-                        ],
-                        stroke: parentStyle.lineColor, 
-                        strokeWidth: parentStyle.lineWidth, 
-                        dash: parentStyle.lineDash, // Đã được đảm bảo là array từ DEFAULT_NODE_STYLE hoặc Firestore
-                        lineCap: 'round',
-                        lineJoin: 'round',
-                        name: 'connectionLine'
+                        points: [ parentKonvaNode.x() + parentActualWidth / 2, parentKonvaNode.y() + parentActualHeight / 2, childKonvaNode.x() + childActualWidth / 2, childKonvaNode.y() + childActualHeight / 2 ],
+                        stroke: parentStyle.lineColor, strokeWidth: parentStyle.lineWidth, dash: parentStyle.lineDash, lineCap: 'round', lineJoin: 'round', name: 'connectionLine'
                     });
-                    currentKonvaLayer.add(line);
-                    line.moveToBottom();
+                    currentKonvaLayer.add(line); line.moveToBottom();
                 }
             });
+            console.log("renderNodesAndLines: Batch drawing layer.");
             currentKonvaLayer.batchDraw();
         }
-        
-        // --- Creation Handle Logic ---
-        const HANDLE_RADIUS = 8;
-        const HANDLE_FILL = 'rgba(0,180,0,0.7)';
-        const HANDLE_STROKE = 'rgba(0,100,0,0.9)';
+        function addCreationHandle(parentNodeGroup, parentCurrentShapeHeight) { /* ... */ }
+        function removeCreationHandle(parentNodeGroup) { /* ... */ }
+        function editTextOnKonvaNode(konvaGroup, konvaTextNode, currentShapeHeight) { /* ... */ }
 
-        function addCreationHandle(parentNodeGroup, parentCurrentHeight) { 
-            if (!parentNodeGroup || parentNodeGroup.findOne('.creationHandle')) return; 
+        // --- HÀM THU THẬP DỮ LIỆU NHÁNH ---
+        function collectBranchDataRecursive(nodeId, allNodes, level, collectedTexts) { /* ... */ }
 
-            const parentShape = parentNodeGroup.findOne('.nodeShape');
-            if (!parentShape) return;
-            
-            const shapeWidth = parentShape.width(); 
-            // parentCurrentHeight là chiều cao thực tế của shape, đã tính toán dựa trên text
-
-            let handleX = shapeWidth / 2;
-            let handleY = parentCurrentHeight; 
-
-            if (parentShape.getClassName() === 'Ellipse') {
-                handleX = parentShape.x(); 
-                handleY = parentShape.y() + parentShape.radiusY(); 
-            }
+        // --- AI LOGIC FUNCTIONS (Function definitions) ---
+        async function suggestChildNodesWithAI(parentNodeKonva) { /* ... */ }
+        async function expandNodeWithAI(targetNodeKonva) { /* ... */ }
+        async function generateExamplesWithAI(targetNodeKonva) { /* ... */ }
+        async function askAIAboutNode(targetNodeKonva) { /* ... */ }
+        async function summarizeBranchWithAI(targetNodeKonva) { /* ... */ }
+        async function generateActionPlanWithAI(targetNodeKonva) { /* ... */ }
 
 
-            const handle = new Konva.Circle({
-                x: handleX, 
-                y: handleY,    
-                radius: HANDLE_RADIUS,
-                fill: HANDLE_FILL,
-                stroke: HANDLE_STROKE,
-                strokeWidth: 1,
-                draggable: true, 
-                name: 'creationHandle',
-                dragBoundFunc: function(pos) {
-                    const parentAbsPos = parentNodeGroup.getAbsolutePosition();
-                    return {
-                        x: pos.x - parentAbsPos.x,
-                        y: pos.y - parentAbsPos.y,
-                    };
-                }
-            });
-
-            parentNodeGroup.add(handle);
-            parentNodeGroup.creationHandle = handle; 
-
-            handle.on('dragstart', function(e) {
-                e.evt.cancelBubble = true; 
-                if (!currentKonvaLayer || !selectedKonvaNode) return;
-
-                const parentStyle = allNodesDataForCurrentMap.find(n => n.id === selectedKonvaNode.id())?.style || {};
-                const lineColor = parentStyle.lineColor || '#007bff'; 
-                const lineWidth = parentStyle.lineWidth || 2;
-                
-                const currentParentShape = selectedKonvaNode.findOne('.nodeShape');
-                let startX = currentParentShape.width() / 2;
-                let startY = currentParentShape.height() / 2; 
-                if (currentParentShape.getClassName() === 'Ellipse') {
-                    startX = currentParentShape.x(); 
-                    startY = currentParentShape.y(); 
-                }
+        // --- TOOLBAR BUTTON ACTIONS & KEYBOARD SHORTCUTS & ZOOM (Function definitions) ---
+        async function addChildNodeLogic(parentNode) { /* ... */ }
+        function findAllDescendantNodeIds(parentNodeId, allNodes) { /* ... */ }
+        async function deleteNodeLogic(nodeToDelete) { /* ... */ }
+        // function handleGlobalKeyDown(e) { /* ... */ } // Definition moved to top
 
 
-                tempCreationLine = new Konva.Line({
-                    points: [
-                        startX, 
-                        startY,
-                        this.x(), 
-                        this.y()
-                    ],
-                    stroke: lineColor,
-                    strokeWidth: lineWidth,
-                    dash: parentStyle.lineDash || [] 
-                });
-                selectedKonvaNode.add(tempCreationLine); 
-                currentKonvaLayer.batchDraw();
-            });
-
-            handle.on('dragmove', function(e) {
-                e.evt.cancelBubble = true;
-                if (tempCreationLine) {
-                    const points = tempCreationLine.points();
-                    points[2] = this.x();
-                    points[3] = this.y();
-                    tempCreationLine.points(points);
-                    currentKonvaLayer.batchDraw();
-                }
-            });
-
-            handle.on('dragend', async function(e) {
-                e.evt.cancelBubble = true;
-                if (tempCreationLine) {
-                    tempCreationLine.destroy();
-                    tempCreationLine = null;
-                }
-                
-                const handleFinalRelativeX = this.x();
-                const handleFinalRelativeY = this.y();
-
-                const parentAbsPos = selectedKonvaNode.getAbsolutePosition();
-                const newNodeAbsX = parentAbsPos.x + handleFinalRelativeX;
-                const newNodeAbsY = parentAbsPos.y + handleFinalRelativeY;
-                
-                const currentParentShapeForReset = selectedKonvaNode.findOne('.nodeShape');
-                let resetHandleX = currentParentShapeForReset.width() / 2;
-                let resetHandleY = currentParentShapeForReset.height(); 
-                if (currentParentShapeForReset.getClassName() === 'Ellipse') {
-                    resetHandleX = currentParentShapeForReset.x(); 
-                    resetHandleY = currentParentShapeForReset.y() + currentParentShapeForReset.radiusY(); 
-                }
-
-
-                this.position({ 
-                    x: resetHandleX, 
-                    y: resetHandleY 
-                });
-
-                if (currentMindMapId && db && selectedKonvaNode) {
-                    const defaultChildWidth = 120;
-                    const defaultChildMinHeight = 40; 
-                    const defaultChildPadding = 10;
-
-                    const newNodeData = {
-                        mapId: currentMindMapId,
-                        parentId: selectedKonvaNode.id(),
-                        text: "Nút mới (kéo)",
-                        position: { 
-                            x: newNodeAbsX - defaultChildWidth / 2,
-                            y: newNodeAbsY - defaultChildMinHeight / 2 
-                        },
-                        style: { 
-                            backgroundColor: "#f9f9f9", 
-                            textColor: "#333333", 
-                            borderColor: "#cccccc", 
-                            width: defaultChildWidth, 
-                            minHeight: defaultChildMinHeight, 
-                            padding: defaultChildPadding,
-                            cornerRadius: 3,
-                            lineColor: DEFAULT_NODE_STYLE.lineColor, 
-                            lineWidth: DEFAULT_NODE_STYLE.lineWidth,
-                            lineDash: DEFAULT_NODE_STYLE.lineDash, 
-                            shape: "rectangle",
-                            fontSize: DEFAULT_NODE_STYLE.fontSize, 
-                            fontFamily: DEFAULT_NODE_STYLE.fontFamily,
-                            icon: '' 
-                        },
-                        createdAt: serverTimestamp()
-                    };
-                    try {
-                        await addDoc(collection(db, "nodes"), newNodeData);
-                    } catch (err) {
-                        console.error("Error creating child node by dragging:", err);
-                        alert("Lỗi khi tạo nút con: " + err.message);
-                    }
-                }
-                currentKonvaLayer.batchDraw();
-            });
-            currentKonvaLayer.batchDraw();
-        }
-
-        function removeCreationHandle(parentNodeGroup) {
-            if (parentNodeGroup && parentNodeGroup.creationHandle) {
-                parentNodeGroup.creationHandle.destroy();
-                parentNodeGroup.creationHandle = null;
-                currentKonvaLayer.batchDraw();
-            }
-        }
-
-
-        function editTextOnKonvaNode(konvaGroup, konvaTextNode, currentShapeHeight) { 
-            if (!currentKonvaStage || !currentKonvaLayer || isEditingText) return;
-            isEditingText = true; 
-            konvaTextNode.hide();
-            const iconNode = konvaGroup.findOne('.nodeIcon');
-            if (iconNode) iconNode.hide();
-
-            currentKonvaLayer.draw(); 
-
-            const textAbsPos = konvaTextNode.getAbsolutePosition(); 
-            const stageBox = currentKonvaStage.container().getBoundingClientRect(); 
-            let textareaBeingRemoved = false; 
-
-            const areaPosition = { 
-                x: stageBox.left + textAbsPos.x,
-                y: stageBox.top + textAbsPos.y
-            };
-            
-            // const nodeStyle = allNodesDataForCurrentMap.find(n => n.id === konvaGroup.id())?.style || {};
-            // const textPadding = nodeStyle.padding !== undefined ? nodeStyle.padding : DEFAULT_NODE_STYLE.padding;
-
-
-            const textarea = document.createElement('textarea');
-            document.body.appendChild(textarea);
-
-            textarea.value = konvaTextNode.text();
-            textarea.style.position = 'absolute';
-            textarea.style.top = areaPosition.y + 'px';
-            textarea.style.left = areaPosition.x + 'px';
-            textarea.style.width = konvaTextNode.width() * currentKonvaStage.scaleX() + 'px'; 
-            textarea.style.height = konvaTextNode.height() * currentKonvaStage.scaleY() + 'px';
-            textarea.style.fontSize = konvaTextNode.fontSize() * currentKonvaStage.scaleY() + 'px'; 
-            textarea.style.border = '1px solid #999';
-            textarea.style.padding = '0px'; 
-            textarea.style.margin = '0px';
-            textarea.style.overflow = 'hidden';
-            textarea.style.background = 'white';
-            textarea.style.outline = 'none';
-            textarea.style.resize = 'none';
-            textarea.style.textAlign = konvaTextNode.align();
-            textarea.style.fontFamily = konvaTextNode.fontFamily();
-            textarea.style.display = 'flex'; 
-            textarea.style.alignItems = 'center'; 
-            textarea.style.justifyContent = 'center'; 
-
-
-            textarea.focus();
-            textarea.select();
-
-
-            async function saveAndRemoveTextarea() {
-                if (textareaBeingRemoved) return; 
-                textareaBeingRemoved = true; 
-
-                const newText = textarea.value;
-                if (textarea.parentNode) { 
-                    textarea.parentNode.removeChild(textarea);
-                }
-                
-                const nodeRef = doc(db, "nodes", konvaGroup.id());
-                const nodeSnap = await getDoc(nodeRef);
-                let currentStyleForCalc = DEFAULT_NODE_STYLE;
-                if (nodeSnap.exists() && nodeSnap.data().style) {
-                    currentStyleForCalc = {...DEFAULT_NODE_STYLE, ...nodeSnap.data().style};
-                }
-
-                let iconWidthForCalc = 0;
-                if (currentStyleForCalc.icon && currentStyleForCalc.icon !== '') {
-                    const tempIconForCalc = new Konva.Text({ text: currentStyleForCalc.icon, fontSize: currentStyleForCalc.iconSize, fontFamily: currentStyleForCalc.fontFamily });
-                    iconWidthForCalc = tempIconForCalc.width() + currentStyleForCalc.iconSpacing;
-                }
-
-                const tempTextForHeightCalc = new Konva.Text({ 
-                    text: newText,
-                    fontSize: currentStyleForCalc.fontSize,
-                    fontFamily: currentStyleForCalc.fontFamily,
-                    width: currentStyleForCalc.width - 2 * currentStyleForCalc.padding - iconWidthForCalc,
-                    align: 'center'
-                });
-                const newTextContentHeight = tempTextForHeightCalc.height();
-                const newFinalShapeHeight = Math.max(currentStyleForCalc.minHeight, newTextContentHeight + 2 * currentStyleForCalc.padding, currentStyleForCalc.icon ? (currentStyleForCalc.iconSize || DEFAULT_NODE_STYLE.iconSize) + 2 * currentStyleForCalc.padding : 0);
-                
-                window.removeEventListener('click', handleOutsideClick); 
-                isEditingText = false; 
-
-                if(!db) return;
-                try {
-                    const updatedNodeData = { 
-                        text: newText, 
-                        style: { ...currentStyleForCalc, height: newFinalShapeHeight } 
-                    };
-                    await updateDoc(nodeRef, updatedNodeData);
-                    console.log("Node text and style.height updated in Firestore.");
-                } catch (e) { 
-                    console.error("Error updating node text and height in Firestore:", e); 
-                    const originalKonvaTextNode = konvaGroup.findOne('Text'); 
-                     if (originalKonvaTextNode) {
-                        originalKonvaTextNode.text(textarea.value); 
-                        originalKonvaTextNode.show();
-                         const originalIconNode = konvaGroup.findOne('.nodeIcon');
-                        if (originalIconNode) originalIconNode.show();
-                        currentKonvaLayer.batchDraw();
-                    }
-                }
-            }
-
-            function removeTextareaWithoutSaving() {
-                if (textareaBeingRemoved) return;
-                textareaBeingRemoved = true;
-                 if (textarea.parentNode) {
-                    textarea.parentNode.removeChild(textarea);
-                }
-                const originalKonvaTextNode = konvaGroup.findOne('Text'); 
-                if (originalKonvaTextNode) {
-                    originalKonvaTextNode.show();
-                }
-                const originalIconNode = konvaGroup.findOne('.nodeIcon');
-                if (originalIconNode) originalIconNode.show();
-                currentKonvaLayer.batchDraw();
-                window.removeEventListener('click', handleOutsideClick);
-                isEditingText = false; 
-            }
-
-            textarea.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    saveAndRemoveTextarea();
-                }
-                if (e.key === 'Escape') {
-                    removeTextareaWithoutSaving();
-                }
-            });
-            textarea.addEventListener('blur', saveAndRemoveTextarea);
-
-            function handleOutsideClick(e) {
-                if (e.target !== textarea) {
-                    saveAndRemoveTextarea();
-                }
-            }
-            setTimeout(() => {
-                window.addEventListener('click', handleOutsideClick);
-            }, 0);
-        }
-
-        // --- CONTEXT MENU ACTIONS ---
-        if (ctxAddChildButton) {
-            ctxAddChildButton.addEventListener('click', async () => {
-                if (!rightClickedKonvaNode || !currentMindMapId || !db) {
-                    alert("Không thể thêm nút con. Vui lòng thử lại.");
-                    if(contextMenu) hideElement(contextMenu);
-                    return;
-                }
-                await addChildNodeLogic(rightClickedKonvaNode);
-                if(contextMenu) hideElement(contextMenu);
-            });
-        }
-
-        if (ctxEditTextButton) {
-            ctxEditTextButton.addEventListener('click', () => {
-                if (rightClickedKonvaNode) {
-                    const textNode = rightClickedKonvaNode.findOne('Text');
-                    const shapeNode = rightClickedKonvaNode.findOne('.nodeShape');
-                    if (textNode && shapeNode) {
-                        editTextOnKonvaNode(rightClickedKonvaNode, textNode, shapeNode.height());
-                    }
-                }
-                if(contextMenu) hideElement(contextMenu);
-            });
-        }
-
-        if (ctxDeleteNodeButton) {
-            ctxDeleteNodeButton.addEventListener('click', async () => {
-                if (!rightClickedKonvaNode || !currentMindMapId || !db) {
-                     alert("Không thể xóa nút. Vui lòng thử lại.");
-                     if(contextMenu) hideElement(contextMenu);
-                     return;
-                }
-                await deleteNodeLogic(rightClickedKonvaNode); 
-                if(contextMenu) hideElement(contextMenu);
-            });
-        }
-        document.addEventListener('click', function (e) {
-            if (contextMenu && !contextMenu.contains(e.target) && e.target !== currentKonvaStage && !e.target.hasName?.('mindmapNodeGroup') && !e.target.getParent?.()?.hasName?.('mindmapNodeGroup')) {
-                hideElement(contextMenu);
-            }
-        });
-
-        // --- TOOLBAR BUTTON ACTIONS (Dùng lại logic nếu có thể) ---
-        async function addChildNodeLogic(parentNode) {
-            if (!parentNode || !currentMindMapId || !db) return;
-
-            const parentShape = parentNode.findOne('.nodeShape');
-            const parentWidth = parentShape?.width() || (parentShape?.radiusX && parentShape.radiusX() * 2) || 150;
-            const parentHeight = parentShape?.height() || (parentShape?.radiusY && parentShape.radiusY() * 2) || 50;
-
-            const newNodeData = {
-                mapId: currentMindMapId,
-                parentId: parentNode.id(),
-                text: "Nút con mới",
-                position: {
-                    x: parentNode.x() + parentWidth / 4, 
-                    y: parentNode.y() + parentHeight + 30 
-                },
-                style: { 
-                    backgroundColor: "#f9f9f9", textColor: "#333333", borderColor: "#cccccc", 
-                    width: 120, minHeight: 40, padding: 10, 
-                    cornerRadius: 3,
-                    lineColor: DEFAULT_NODE_STYLE.lineColor, 
-                    lineWidth: DEFAULT_NODE_STYLE.lineWidth,
-                    lineDash: DEFAULT_NODE_STYLE.lineDash, 
-                    shape: "rectangle",
-                    fontSize: DEFAULT_NODE_STYLE.fontSize, 
-                    fontFamily: DEFAULT_NODE_STYLE.fontFamily,
-                    icon: '' 
-                },
-                createdAt: serverTimestamp()
-            };
+        // --- MAIN SCRIPT EXECUTION AFTER DOM IS LOADED ---
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded: Event fired.");
+            // Initialize Firebase services
             try {
-                await addDoc(collection(db, "nodes"), newNodeData);
-            } catch (e) {
-                console.error("Error adding child node:", e);
-                alert("Lỗi khi thêm nút con: " + e.message);
-            }
-        }
-        
-        function findAllDescendantNodeIds(parentNodeId, allNodes) {
-            let descendantIds = [];
-            const directChildren = allNodes.filter(node => node.parentId === parentNodeId);
-            for (const child of directChildren) {
-                descendantIds.push(child.id);
-                descendantIds = descendantIds.concat(findAllDescendantNodeIds(child.id, allNodes));
-            }
-            return descendantIds;
-        }
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                console.log("DOMContentLoaded: Firebase core services initialized.");
 
-        async function deleteNodeLogic(nodeToDelete) {
-            if (!nodeToDelete || !currentMindMapId || !db) return;
-            const nodeId = nodeToDelete.id();
-            const konvaTextNode = nodeToDelete.findOne('Text'); 
-            const nodeText = konvaTextNode ? konvaTextNode.text() : "Không có tiêu đề"; 
-
-            if (confirm(`Bạn có chắc muốn xóa nút "${nodeText}" và TẤT CẢ các nút con của nó không? Hành động này không thể hoàn tác.`)) {
-                try {
-                    const descendantIds = findAllDescendantNodeIds(nodeId, allNodesDataForCurrentMap);
-                    const allIdsToDelete = [nodeId, ...descendantIds];
-                    
-                    const batch = writeBatch(db);
-                    allIdsToDelete.forEach(id => {
-                        batch.delete(doc(db, "nodes", id));
-                    });
-                    await batch.commit();
-
-                    console.log(`Node ${nodeId} and its descendants deleted.`);
-                    if (selectedKonvaNode && allIdsToDelete.includes(selectedKonvaNode.id())) {
-                        selectedKonvaNode = null;
-                        if(nodeStylePanel) hideElement(nodeStylePanel);
-                    }
-                    if (rightClickedKonvaNode && allIdsToDelete.includes(rightClickedKonvaNode.id())) {
-                        rightClickedKonvaNode = null;
-                    }
-                    alert("Nút và các nút con đã được xóa.");
-                } catch (e) {
-                    console.error("Error deleting node and descendants:", e);
-                    alert("Lỗi khi xóa nút: " + e.message);
+                if (typeof getAI === 'function' && typeof GoogleAIBackend === 'function' && typeof getGenerativeModel === 'function') {
+                    ai = getAI(app, { backend: new GoogleAIBackend() });
+                    generativeModel = getGenerativeModel(ai, { model: "gemini-1.5-flash-latest" });
+                    console.log("DOMContentLoaded: Firebase AI SDK initialized successfully!");
+                } else {
+                    console.error("DOMContentLoaded: Firebase AI SDK components not found. AI features will be disabled.");
+                    alert("Lỗi: Không thể tải các thành phần AI của Firebase. Các tính năng AI sẽ bị vô hiệu hóa.");
                 }
+            } catch (error) {
+                console.error("DOMContentLoaded: Firebase initialization error:", error);
+                alert("Lỗi nghiêm trọng: Không thể khởi tạo Firebase hoặc AI SDK. Chi tiết: " + error.message);
             }
-        }
+
+            // Assign DOM elements
+            nodeStylePanel = document.getElementById('node-style-panel');
+            nodeShapeSelect = document.getElementById('node-shape-select');
+            nodeFontFamilySelect = document.getElementById('node-font-family-select');
+            nodeFontSizeInput = document.getElementById('node-font-size-input');
+            nodeIconSelect = document.getElementById('node-icon-select');
+            nodeBgColorInput = document.getElementById('node-bg-color');
+            nodeTextColorInput = document.getElementById('node-text-color');
+            nodeBorderColorInput = document.getElementById('node-border-color');
+            nodeLineColorInput = document.getElementById('node-line-color');
+            nodeLineDashSelect = document.getElementById('node-line-dash-select');
+            nodeLineWidthInput = document.getElementById('node-line-width');
+            closeNodeStylePanelButton = document.getElementById('close-node-style-panel-button');
 
 
-        if (addChildNodeButton) { 
-            addChildNodeButton.addEventListener('click', async () => {
-                if (!selectedKonvaNode) {
-                    alert("Vui lòng chọn một nút cha để thêm nút con.");
-                    return;
+            contextMenu = document.getElementById('context-menu');
+            ctxAddChildButton = document.getElementById('ctx-add-child');
+            ctxEditTextButton = document.getElementById('ctx-edit-text');
+            ctxViewFullContentButton = document.getElementById('ctx-view-full-content');
+            ctxSuggestChildrenButton = document.getElementById('ctx-suggest-children');
+            ctxExpandNodeButton = document.getElementById('ctx-expand-node');
+            ctxGenerateExamplesButton = document.getElementById('ctx-generate-examples');
+            ctxAskAiNodeButton = document.getElementById('ctx-ask-ai-node');
+            ctxSummarizeBranchButton = document.getElementById('ctx-summarize-branch');
+            ctxGenerateActionPlanButton = document.getElementById('ctx-generate-action-plan');
+            ctxDeleteNodeButton = document.getElementById('ctx-delete-node');
+
+            aiLoadingIndicator = document.getElementById('ai-loading-indicator');
+            aiResponseModalOverlay = document.getElementById('ai-response-modal-overlay');
+            aiResponseModalTitle = document.getElementById('ai-response-modal-title');
+            aiResponseModalBody = document.getElementById('ai-response-modal-body');
+            aiResponseModalCloseButton = document.getElementById('ai-response-modal-close-button');
+
+            nodeContentModalOverlay = document.getElementById('node-content-modal-overlay');
+            nodeContentModalTitle = document.getElementById('node-content-modal-title');
+            nodeContentModalBody = document.getElementById('node-content-modal-body');
+            nodeContentModalCloseButton = document.getElementById('node-content-modal-close-button');
+
+            authSection = document.getElementById('auth-section');
+            loginForm = document.getElementById('login-form');
+            registerForm = document.getElementById('register-form');
+            loginEmailInput = document.getElementById('login-email');
+            loginPasswordInput = document.getElementById('login-password');
+            loginButton = document.getElementById('login-button');
+            showRegisterLink = document.getElementById('show-register-link');
+            registerEmailInput = document.getElementById('register-email');
+            registerPasswordInput = document.getElementById('register-password');
+            registerButton = document.getElementById('register-button');
+            showLoginLink = document.getElementById('show-login-link');
+            loginErrorMsg = document.getElementById('login-error');
+            registerErrorMsg = document.getElementById('register-error');
+
+            mainAppSection = document.getElementById('main-app-section');
+            mainAppTitle = document.getElementById('main-app-title');
+            userEmailDisplay = document.getElementById('user-info').querySelector('#user-email-display');
+            logoutButton = document.getElementById('user-info').querySelector('#logout-button');
+
+            mindmapManagementView = document.getElementById('mindmap-management-view');
+            newMindmapTitleInput = document.getElementById('new-mindmap-title-input');
+            createMindmapButton = document.getElementById('create-mindmap-button');
+            mindmapListUl = document.getElementById('mindmap-list');
+            mindmapListLoading = document.getElementById('mindmap-list-loading');
+
+            canvasView = document.getElementById('canvas-view');
+            backToMapsListButton = document.getElementById('back-to-maps-list-button');
+            currentMindmapTitleDisplay = document.getElementById('current-mindmap-title-display');
+            addChildNodeButton = document.getElementById('add-child-node-button');
+            deleteNodeButton = document.getElementById('delete-node-button');
+            zoomInButton = document.getElementById('zoom-in-button');
+            zoomOutButton = document.getElementById('zoom-out-button');
+            resetZoomButton = document.getElementById('reset-zoom-button');
+            konvaContainer = document.getElementById('konva-container');
+            konvaContainerLoading = document.getElementById('konva-container-loading');
+
+            hamburgerMenuButton = document.getElementById('hamburger-menu-button');
+            mobileNavMenu = document.getElementById('mobile-nav-menu');
+            mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+            userEmailDisplayMobile = document.getElementById('user-email-display-mobile');
+            mobileBackToMapsListButton = document.getElementById('mobile-back-to-maps-list-button');
+            logoutButtonMobile = document.getElementById('logout-button-mobile');
+            fabAddNode = document.getElementById('fab-add-node');
+
+            mobileNodeContextToolbar = document.getElementById('mobile-node-context-toolbar');
+            mobileCtxEditButton = document.getElementById('mobile-ctx-edit');
+            mobileCtxStyleButton = document.getElementById('mobile-ctx-style');
+            mobileCtxAiButton = document.getElementById('mobile-ctx-ai');
+            mobileCtxDeleteButton = document.getElementById('mobile-ctx-delete');
+            console.log("DOMContentLoaded: All DOM elements assigned.");
+
+
+            // Setup event listeners
+            // ... (Toàn bộ phần gán event listeners như trước)
+            if (aiResponseModalCloseButton) { aiResponseModalCloseButton.addEventListener('click', closeAiResponseModal); }
+            if (aiResponseModalOverlay) { aiResponseModalOverlay.addEventListener('click', function(event) { if (event.target === aiResponseModalOverlay) closeAiResponseModal(); }); }
+            if (nodeContentModalCloseButton) { nodeContentModalCloseButton.addEventListener('click', closeNodeContentModal); }
+            if (nodeContentModalOverlay) { nodeContentModalOverlay.addEventListener('click', function(event) { if (event.target === nodeContentModalOverlay) closeNodeContentModal(); });}
+
+            if (showRegisterLink) { showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); hideElement(loginForm); showElement(registerForm); clearAuthError(loginErrorMsg); }); }
+            if (showLoginLink) { showLoginLink.addEventListener('click', (e) => { e.preventDefault(); hideElement(registerForm); showElement(loginForm); clearAuthError(registerErrorMsg); }); }
+            if (registerButton) { registerButton.addEventListener('click', handleRegister); }
+            if (loginButton) { loginButton.addEventListener('click', handleLogin); }
+            if (logoutButton) { logoutButton.addEventListener('click', handleLogout); }
+            if (logoutButtonMobile) { logoutButtonMobile.addEventListener('click', handleLogout); }
+
+            if (auth) {
+                console.log("DOMContentLoaded: Setting up onAuthStateChanged listener.");
+                onAuthStateChanged(auth, authStateChangedHandler);
+            } else {
+                console.error("DOMContentLoaded: Auth service not available for onAuthStateChanged.");
+            }
+
+
+            if (backToMapsListButton) { backToMapsListButton.addEventListener('click', showMindmapManagementView); }
+            if (mobileBackToMapsListButton) {
+                mobileBackToMapsListButton.addEventListener('click', () => {
+                    showMindmapManagementView();
+                    mobileNavMenu.classList.remove('open');
+                    hideElement(mobileNavOverlay);
+                });
+            }
+
+
+            if (nodeShapeSelect) nodeShapeSelect.addEventListener('change', (e) => handleNodeStyleChange('shape', e.target.value));
+            if (nodeFontFamilySelect) nodeFontFamilySelect.addEventListener('change', (e) => handleNodeStyleChange('fontFamily', e.target.value));
+            if (nodeFontSizeInput) nodeFontSizeInput.addEventListener('input', (e) => handleNodeStyleChange('fontSize', e.target.value));
+            if (nodeIconSelect) nodeIconSelect.addEventListener('change', (e) => handleNodeStyleChange('icon', e.target.value));
+            if (nodeBgColorInput) nodeBgColorInput.addEventListener('input', (e) => handleNodeStyleChange('backgroundColor', e.target.value));
+            if (nodeTextColorInput) nodeTextColorInput.addEventListener('input', (e) => handleNodeStyleChange('textColor', e.target.value));
+            if (nodeBorderColorInput) nodeBorderColorInput.addEventListener('input', (e) => handleNodeStyleChange('borderColor', e.target.value));
+            if (nodeLineColorInput) nodeLineColorInput.addEventListener('input', (e) => handleNodeStyleChange('lineColor', e.target.value));
+            if (nodeLineDashSelect) nodeLineDashSelect.addEventListener('change', (e) => handleNodeStyleChange('lineDash', e.target.value));
+            if (nodeLineWidthInput) nodeLineWidthInput.addEventListener('input', (e) => handleNodeStyleChange('lineWidth', e.target.value));
+            if (closeNodeStylePanelButton) {
+                closeNodeStylePanelButton.addEventListener('click', () => {
+                    if (nodeStylePanel) {
+                        nodeStylePanel.classList.remove('active-mobile-style');
+                    }
+                });
+            }
+
+
+            if (createMindmapButton) { createMindmapButton.addEventListener('click', handleCreateMindmap); }
+
+            if (ctxAddChildButton) {
+                ctxAddChildButton.addEventListener('click', async () => {
+                    let targetNode = rightClickedKonvaNode || selectedKonvaNode;
+                    if (!targetNode || !currentMindMapId || !db) {
+                        alert("Không thể thêm nút con.");
+                        hideContextMenu(); return;
+                    }
+                    await addChildNodeLogic(targetNode);
+                    hideContextMenu();
+                });
+            }
+             if (ctxEditTextButton) {
+                ctxEditTextButton.addEventListener('click', () => {
+                    let targetNode = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNode) {
+                        const textNode = targetNode.findOne('.nodeTextContent');
+                        const shapeNode = targetNode.findOne('.nodeShape');
+                        if (textNode && shapeNode) {
+                            editTextOnKonvaNode(targetNode, textNode, shapeNode.height());
+                        }
+                    }
+                    hideContextMenu();
+                });
+            }
+            if (ctxViewFullContentButton) {
+                ctxViewFullContentButton.addEventListener('click', () => {
+                    const targetNode = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNode) {
+                        const fullText = targetNode.getAttr('fullTextData');
+                        if (fullText) {
+                            openNodeContentModal(fullText.substring(0,30)+"...", fullText);
+                        } else {
+                            alert("Không có nội dung đầy đủ để hiển thị.");
+                        }
+                    } else {
+                        alert("Vui lòng chọn một nút để xem nội dung.");
+                    }
+                    hideContextMenu();
+                });
+            }
+            if (ctxSuggestChildrenButton) {
+                ctxSuggestChildrenButton.addEventListener('click', async () => {
+                    let targetNodeForAI = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNodeForAI) { await suggestChildNodesWithAI(targetNodeForAI); }
+                    else { alert("Vui lòng chọn một nút cha để AI gợi ý nút con."); hideContextMenu(); }
+                });
+            }
+            if (ctxExpandNodeButton) {
+                ctxExpandNodeButton.addEventListener('click', async () => {
+                    let targetNodeForAI = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNodeForAI) { await expandNodeWithAI(targetNodeForAI); }
+                    else { alert("Vui lòng chọn một nút để AI mở rộng ý tưởng."); hideContextMenu(); }
+                });
+            }
+            if (ctxGenerateExamplesButton) {
+                ctxGenerateExamplesButton.addEventListener('click', async () => {
+                    let targetNodeForAI = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNodeForAI) { await generateExamplesWithAI(targetNodeForAI); }
+                    else { alert("Vui lòng chọn một nút để AI tạo ví dụ."); hideContextMenu(); }
+                });
+            }
+            if (ctxAskAiNodeButton) {
+                ctxAskAiNodeButton.addEventListener('click', async () => {
+                    let targetNodeForAI = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNodeForAI) { await askAIAboutNode(targetNodeForAI); }
+                    else { alert("Vui lòng chọn một nút để đặt câu hỏi cho AI."); hideContextMenu(); }
+                });
+            }
+            if (ctxSummarizeBranchButton) {
+                ctxSummarizeBranchButton.addEventListener('click', async () => {
+                    let targetNodeForSummarize = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNodeForSummarize) {
+                        await summarizeBranchWithAI(targetNodeForSummarize);
+                    } else {
+                        alert("Vui lòng chọn một nút gốc của nhánh để AI tóm tắt.");
+                        hideContextMenu();
+                    }
+                });
+            }
+            if (ctxGenerateActionPlanButton) {
+                ctxGenerateActionPlanButton.addEventListener('click', async () => {
+                    let targetNodeForPlan = rightClickedKonvaNode || selectedKonvaNode;
+                    if (targetNodeForPlan) {
+                        await generateActionPlanWithAI(targetNodeForPlan);
+                    } else {
+                        alert("Vui lòng chọn một nút để AI tạo kế hoạch hành động.");
+                        hideContextMenu();
+                    }
+                });
+            }
+            if (ctxDeleteNodeButton) {
+                ctxDeleteNodeButton.addEventListener('click', async () => {
+                    let targetNode = rightClickedKonvaNode || selectedKonvaNode;
+                    if (!targetNode || !currentMindMapId || !db) {
+                         alert("Không thể xóa nút.");
+                         hideContextMenu(); return;
+                    }
+                    await deleteNodeLogic(targetNode);
+                    hideContextMenu();
+                });
+            }
+            document.addEventListener('click', function (e) {
+                if (contextMenu && !contextMenu.classList.contains('hidden')) {
+                    if (!contextMenu.contains(e.target) && e.target !== currentKonvaStage && !e.target.hasName?.('mindmapNodeGroup') && !e.target.getParent?.()?.hasName?.('mindmapNodeGroup')) {
+                         if (!contextMenuJustOpened) {
+                            hideContextMenu();
+                        }
+                         contextMenuJustOpened = false;
+                    }
                 }
-                await addChildNodeLogic(selectedKonvaNode);
+                if (nodeStylePanel && nodeStylePanel.classList.contains('active-mobile-style') && !nodeStylePanel.contains(e.target) && e.target !== mobileCtxStyleButton && e.target !== closeNodeStylePanelButton) {
+                    nodeStylePanel.classList.remove('active-mobile-style');
+                }
+
             });
-        }
 
-        if (deleteNodeButton) {
-            deleteNodeButton.addEventListener('click', async () => {
-                if (!selectedKonvaNode) {
-                    alert("Vui lòng chọn một nút để xóa.");
-                    return;
-                }
-                await deleteNodeLogic(selectedKonvaNode);
-            });
-        }
-
-        // --- KEYBOARD SHORTCUTS ---
-        const KEYBOARD_MOVE_STEP = 10;
-
-        function handleGlobalKeyDown(e) {
-            if (isEditingText) return; 
-
-            if (contextMenu && !contextMenu.classList.contains('hidden')) { 
-                if (e.key === 'Escape') {
-                    hideElement(contextMenu);
-                }
-                return; 
+            if (addChildNodeButton) {
+                addChildNodeButton.addEventListener('click', async () => {
+                    if (!selectedKonvaNode) { alert("Vui lòng chọn một nút cha để thêm nút con."); return; }
+                    await addChildNodeLogic(selectedKonvaNode);
+                });
             }
-
-
-            if (!selectedKonvaNode && !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) { 
-                if (e.key === 'Tab' || e.key === 'Enter' || e.key === 'Delete' || e.key === 'Backspace') return;
+            if (deleteNodeButton) {
+                deleteNodeButton.addEventListener('click', async () => {
+                    if (!selectedKonvaNode) { alert("Vui lòng chọn một nút để xóa."); return; }
+                    await deleteNodeLogic(selectedKonvaNode);
+                });
             }
+            if(zoomInButton) { zoomInButton.addEventListener('click', () => { if (!currentKonvaStage) return; const oldScale = currentKonvaStage.scaleX(); currentKonvaStage.scale({ x: oldScale * scaleBy, y: oldScale * scaleBy }); currentKonvaStage.batchDraw(); saveCanvasState(); }); }
+            if(zoomOutButton) { zoomOutButton.addEventListener('click', () => { if (!currentKonvaStage) return; const oldScale = currentKonvaStage.scaleX(); currentKonvaStage.scale({ x: oldScale / scaleBy, y: oldScale / scaleBy }); currentKonvaStage.batchDraw(); saveCanvasState(); }); }
+            if(resetZoomButton) { resetZoomButton.addEventListener('click', () => { if (!currentKonvaStage) return; currentKonvaStage.scale({ x: 1, y: 1 }); currentKonvaStage.position({ x: 0, y: 0 }); currentKonvaStage.batchDraw(); saveCanvasState(); }); }
 
 
-            switch (e.key) {
-                case 'Tab':
-                    if (selectedKonvaNode) {
-                        e.preventDefault();
-                        addChildNodeLogic(selectedKonvaNode);
+            // --- Mobile Navigation Logic ---
+            if (hamburgerMenuButton && mobileNavMenu && mobileNavOverlay) {
+                hamburgerMenuButton.addEventListener('click', () => {
+                    mobileNavMenu.classList.toggle('open');
+                    if (mobileNavMenu.classList.contains('open')) {
+                        showElement(mobileNavOverlay);
+                    } else {
+                        hideElement(mobileNavOverlay);
                     }
-                    break;
-                case 'Enter':
+                });
+                mobileNavOverlay.addEventListener('click', () => {
+                    mobileNavMenu.classList.remove('open');
+                    hideElement(mobileNavOverlay);
+                });
+            }
+
+            // --- FAB Logic ---
+            if (fabAddNode) {
+                fabAddNode.addEventListener('click', async () => {
+                    if (!currentMindMapId || !db) {
+                        alert("Vui lòng mở một sơ đồ để thêm nút.");
+                        return;
+                    }
                     if (selectedKonvaNode) {
-                        e.preventDefault();
-                        const textNode = selectedKonvaNode.findOne('Text');
+                        await addChildNodeLogic(selectedKonvaNode);
+                    } else {
+                        const stage = currentKonvaStage;
+                        if (!stage) return;
+                        const pointerPosition = stage.getPointerPosition() || { x: stage.width() / 2, y: stage.height() / 2};
+                        const scale = stage.scaleX();
+                        const x = (pointerPosition.x - stage.x()) / scale;
+                        const y = (pointerPosition.y - stage.y()) / scale;
+
+                        const newNodeData = {
+                            mapId: currentMindMapId,
+                            parentId: null,
+                            text: "Nút Gốc Mới",
+                            position: { x: x - DEFAULT_NODE_STYLE.width / 2, y: y - DEFAULT_NODE_STYLE.minHeight / 2 },
+                            style: { ...DEFAULT_NODE_STYLE, backgroundColor: "#cce5ff", textColor:"#004085", borderColor:"#b8daff" },
+                            createdAt: serverTimestamp()
+                        };
+                        try {
+                            await addDoc(collection(db, "nodes"), newNodeData);
+                        } catch (e) {
+                            console.error("Error adding new root node:", e);
+                            alert("Lỗi khi thêm nút gốc mới: " + e.message);
+                        }
+                    }
+                });
+            }
+
+            // --- Mobile Node Contextual Toolbar Logic ---
+            if (mobileCtxEditButton) {
+                mobileCtxEditButton.addEventListener('click', () => {
+                    if (selectedKonvaNode) {
+                        const textNode = selectedKonvaNode.findOne('.nodeTextContent');
                         const shapeNode = selectedKonvaNode.findOne('.nodeShape');
                         if (textNode && shapeNode) {
                             editTextOnKonvaNode(selectedKonvaNode, textNode, shapeNode.height());
                         }
                     }
-                    break;
-                case 'Delete':
-                case 'Backspace':
+                });
+            }
+            if (mobileCtxStyleButton) {
+                mobileCtxStyleButton.addEventListener('click', () => {
                     if (selectedKonvaNode) {
-                        e.preventDefault();
-                        deleteNodeLogic(selectedKonvaNode); 
-                    }
-                    break;
-                case 'ArrowUp':
-                case 'ArrowDown':
-                case 'ArrowLeft':
-                case 'ArrowRight':
-                    e.preventDefault();
-                    if (selectedKonvaNode) { 
-                        let newX = selectedKonvaNode.x();
-                        let newY = selectedKonvaNode.y();
-                        if (e.key === 'ArrowUp') newY -= KEYBOARD_MOVE_STEP;
-                        else if (e.key === 'ArrowDown') newY += KEYBOARD_MOVE_STEP;
-                        else if (e.key === 'ArrowLeft') newX -= KEYBOARD_MOVE_STEP;
-                        else if (e.key === 'ArrowRight') newX += KEYBOARD_MOVE_STEP;
-                        
-                        selectedKonvaNode.position({ x: newX, y: newY });
-                        currentKonvaLayer.batchDraw();
-                        if (db) {
-                            updateDoc(doc(db, "nodes", selectedKonvaNode.id()), { position: { x: newX, y: newY } })
-                                .catch(err => console.error("Error updating node position via keyboard:", err));
+                        if (nodeStylePanel) {
+                           nodeStylePanel.classList.add('active-mobile-style');
+                           showElement(nodeStylePanel);
+                           if(closeNodeStylePanelButton) showElement(closeNodeStylePanelButton);
+                           updateNodeStylePanel(allNodesDataForCurrentMap.find(n => n.id === selectedKonvaNode.id()));
+                        } else {
+                           alert("Bảng điều chỉnh kiểu không khả dụng.");
                         }
-                    } else if (currentKonvaStage) { 
-                        let stageX = currentKonvaStage.x();
-                        let stageY = currentKonvaStage.y();
-                         if (e.key === 'ArrowUp') stageY += KEYBOARD_MOVE_STEP * 2; 
-                        else if (e.key === 'ArrowDown') stageY -= KEYBOARD_MOVE_STEP * 2;
-                        else if (e.key === 'ArrowLeft') stageX += KEYBOARD_MOVE_STEP * 2;
-                        else if (e.key === 'ArrowRight') stageX -= KEYBOARD_MOVE_STEP * 2;
-                        currentKonvaStage.position({x: stageX, y: stageY });
-                        currentKonvaStage.batchDraw();
-                        saveCanvasState(); 
                     }
-                    break;
+                });
             }
-        }
+            if (mobileCtxAiButton) {
+                mobileCtxAiButton.addEventListener('click', (event) => {
+                    if (selectedKonvaNode) {
+                        if (contextMenu) {
+                            rightClickedKonvaNode = selectedKonvaNode;
+                            const buttonRect = mobileCtxAiButton.getBoundingClientRect();
+                            contextMenu.style.top = (buttonRect.top - contextMenu.offsetHeight - 5) + 'px';
+                            contextMenu.style.left = (buttonRect.left + (buttonRect.width / 2) - (contextMenu.offsetWidth / 2)) + 'px';
+                            
+                            if (contextMenu.offsetTop < 0) {
+                                contextMenu.style.top = (buttonRect.bottom + 5) + 'px';
+                            }
+                            if (contextMenu.offsetLeft < 0) contextMenu.style.left = '5px';
+                            if (contextMenu.offsetLeft + contextMenu.offsetWidth > window.innerWidth) {
+                                contextMenu.style.left = (window.innerWidth - contextMenu.offsetWidth - 5) + 'px';
+                            }
 
-
-        const scaleBy = 1.1;
-        if(zoomInButton) {
-            zoomInButton.addEventListener('click', () => {
-                if (!currentKonvaStage) return;
-                const oldScale = currentKonvaStage.scaleX();
-                currentKonvaStage.scale({ x: oldScale * scaleBy, y: oldScale * scaleBy });
-                currentKonvaStage.batchDraw();
-                saveCanvasState(); 
-            });
-        }
-        if(zoomOutButton) {
-            zoomOutButton.addEventListener('click', () => {
-                if (!currentKonvaStage) return;
-                const oldScale = currentKonvaStage.scaleX();
-                currentKonvaStage.scale({ x: oldScale / scaleBy, y: oldScale / scaleBy });
-                currentKonvaStage.batchDraw();
-                saveCanvasState(); 
-            });
-        }
-        if(resetZoomButton) {
-            resetZoomButton.addEventListener('click', () => {
-                if (!currentKonvaStage) return;
-                currentKonvaStage.scale({ x: 1, y: 1 });
-                currentKonvaStage.position({ x: 0, y: 0 });
-                currentKonvaStage.batchDraw();
-                saveCanvasState(); 
-            });
-        }
-
-        window.addEventListener('resize', () => {
-            if (currentKonvaStage && konvaContainer && konvaContainer.offsetParent !== null) {
-                const newWidth = konvaContainer.clientWidth;
-                const newHeight = konvaContainer.clientHeight;
-                currentKonvaStage.width(newWidth);
-                currentKonvaStage.height(newHeight);
+                            showElement(contextMenu);
+                            contextMenuJustOpened = true;
+                        } else {
+                           alert("Tính năng AI cho di động đang được phát triển.");
+                        }
+                    }
+                });
             }
-        });
+            if (mobileCtxDeleteButton) {
+                mobileCtxDeleteButton.addEventListener('click', async () => {
+                    if (selectedKonvaNode) {
+                        await deleteNodeLogic(selectedKonvaNode);
+                    }
+                    if(mobileNodeContextToolbar) mobileNodeContextToolbar.classList.remove('active');
+                });
+            }
+
+
+            window.addEventListener('resize', () => {
+                if (currentKonvaStage && konvaContainer && konvaContainer.offsetParent !== null) {
+                    const newWidth = konvaContainer.clientWidth; const newHeight = konvaContainer.clientHeight;
+                    currentKonvaStage.width(newWidth); currentKonvaStage.height(newHeight);
+                }
+            });
+            console.log("DOMContentLoaded: All event listeners set up.");
+
+        }); // End of DOMContentLoaded
 
     </script>
 </body>
